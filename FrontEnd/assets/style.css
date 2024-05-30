@@ -49,20 +49,33 @@ table {
 
 /** end reset css**/
 
+html, body {
+	height: 100%;
+}
+
 body {
 	max-width: 1140px;
-	margin:auto;
-	font-family: 'Work Sans' ;
+	margin: auto;
+	font-family: 'Work Sans';
 	font-size: 14px;
-	background: #FFFEF8
+	background: #FFFEF8;
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
 }
+
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
+	margin: 50px 0;
 }
+
+main {
+	flex: 1;
+}
+
 section {
-	margin: 50px 0
+	margin: 50px 0;
 }
 
 h1{
@@ -78,36 +91,49 @@ h1 > span {
 	font-family: 'Work Sans';
 	font-size:10px;
 	letter-spacing: 0.1em;
-;
 }
 
 h2{
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: #1D6154;
 }
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
+
 nav li {
 	padding: 0 10px;
 	font-size: 1.2em;
 }
 
-li:hover {
-	color: #B1663C;
+.nav-link {
+    color: inherit;
+    text-decoration: none;
 }
+
+.nav-link:hover {
+    color: #B1663C;
+	transition: 0.3s;
+}
+
+.nav-link.active {
+    font-weight: 900;
+	transition: 0.3s;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
 }
+
 #introduction figure {
-	flex: 1
+	flex: 1;
 }
+
 #introduction img {
 	display: block;
 	margin: auto;
@@ -115,8 +141,9 @@ li:hover {
 }
 
 #introduction article {
-	flex: 1
+	flex: 1;
 }
+
 #introduction h2 {
 	margin-bottom: 1em;
 }
@@ -124,6 +151,7 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
 #portfolio h2 {
 	text-align: center;
 	margin: 50px 15px 40px 40px;
@@ -138,7 +166,6 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
 
 .gallery figcaption {
@@ -209,12 +236,13 @@ input[type="submit"]{
 	margin : 2em auto ;
 	width: 180px;
 	text-align: center;
-	border-radius: 60px ;
+	border-radius: 60px;
 }
 
 footer {
 	background-color: #FFF;
 	padding: 24px 107px 20px 0;
+	margin-top: auto;
 }
 
 footer nav ul {
