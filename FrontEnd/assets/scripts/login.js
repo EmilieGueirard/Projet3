@@ -3,9 +3,7 @@
 const form = document.getElementById("loginForm");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
-
-
-    
+  
 // Ecouteur d'événement pour la soumission du formulaire
 
 // Gestion de la soumission du formulaire
