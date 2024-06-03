@@ -55,13 +55,15 @@ html, body {
 
 body {
 	max-width: 1140px;
+	min-height: 100%;
 	margin: auto;
 	font-family: 'Work Sans';
 	font-size: 14px;
 	background: #FFFEF8;
 	display: flex;
 	flex-direction: column;
-	min-height: 100%;
+	
+	
 }
 
 header {
@@ -106,7 +108,7 @@ nav ul {
 }
 
 nav li {
-	padding: 0 10px;
+	padding: 0 22px;
 	font-size: 1.2em;
 }
 
@@ -150,6 +152,7 @@ nav li {
 
 #introduction p {
 	margin-bottom: 0.5em;
+	width: 404px;
 }
 
 #portfolio h2 {
@@ -235,6 +238,7 @@ input[type="submit"]{
 	background-color: #1D6154;
 	margin : 2em auto ;
 	width: 180px;
+	height: 36px !important;
 	text-align: center;
 	border-radius: 60px;
 }
@@ -263,24 +267,24 @@ footer nav ul {
 	width: 379px;
 }
 
-  .login h2 {
+.login h2 {
 	margin-bottom: 37px; 
-  }
-  
-  .form label {
+}
+
+.form label {
 	text-align: left;
 	margin-bottom: 7px; 
-  }
-  
-  .form input {
+}
+
+.form input {
 	margin-bottom: 30px; 
 	padding: 10px;
 	height: 51px;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-  }
-  
-  .form input[type="submit"] {
+}
+
+.form input[type="submit"] {
 	margin-top: 7px; 
 	height: 36px;
 	background-color: #1D6154; 
@@ -289,12 +293,20 @@ footer nav ul {
 	border-radius: 60px; 
 	padding: 10px; 
 	cursor: pointer;
-  }
-  
-  .forgotten_Password {
+}
+
+.forgotten_Password {
 	cursor: pointer; 
-  }
+}
   
-  .forgotten_Password:hover {
+.forgotten_Password:hover {
 	text-decoration: underline; 
-  }
+}
+
+  
+/* Error Message */
+.error-message, .global-error-message {
+    color: red;
+    margin-bottom: 20px; 
+	margin-top: -23px; 
+}

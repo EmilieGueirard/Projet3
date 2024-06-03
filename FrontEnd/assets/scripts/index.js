@@ -11,9 +11,9 @@ let categories = [];
 
 
 /**
- * Fetches data from the provided URL and returns it.
- * @param {string} url - The URL to fetch data from.
- * @returns {Promise<Array>} - A promise that resolves to the fetched data array.
+ * Fetches data from the provided URL and returns it
+ * @param {string} url - The URL to fetch data from
+ * @returns {Promise<Array>} - A promise that resolves to the fetched data array
  */
 async function httpGet(url) 
 {
@@ -30,7 +30,7 @@ async function httpGet(url)
 }
 
 /**
- * Resets the gallery by clearing its inner HTML.
+ * Resets the gallery by clearing its inner HTML
  */
 function resetGallery()
 {
@@ -38,8 +38,8 @@ function resetGallery()
 }
 
 /**
- * Creates the works list in the .gallery element.
- * @param {Array} works - Array of works to be displayed.
+ * Creates the works list in .gallery
+ * @param {Array} works - Array of works to be displayed
  */
 function createWorks(works) 
 {
@@ -48,10 +48,10 @@ function createWorks(works)
 }
 
 /**
- * Creates an HTML Node for a single work and appends it to the gallery.
- * @param {Object} work - The work object to create an HTML node for.
- * @param {string} work.imageUrl - The URL of the work's image.
- * @param {string} work.title - The title of the work.
+ * Creates an HTML Node for a single work and appends it to the gallery
+ * @param {Object} work - The work object to create an HTML node for
+ * @param {string} work.imageUrl - The URL of the work's image
+ * @param {string} work.title - The title of the work
  */
 function createWork(work)
 {
@@ -81,10 +81,10 @@ function createCategories(categories)
 }
 
 /**
- * Creates a button for a single category and appends it to the filters element.
- * @param {Object} category - The category object to create a button for.
- * @param {string} category.name - The name of the category.
- * @param {number} category.id - The ID of the category.
+ * Creates a button for a single category and appends it to the filters element
+ * @param {Object} category - The category object to create a button
+ * @param {string} category.name - The name of the category
+ * @param {number} category.id - The ID of the category
  */
 function createCategory(category)
 {
@@ -95,8 +95,8 @@ function createCategory(category)
 }
 
 /**
- * Filters the works by category ID and updates the gallery display.
- * @param {number} categoryId - The ID of the category to filter works by.
+ * Filters the works by category ID and updates the gallery display
+ * @param {number} categoryId - The ID of the category to filter works
  */
 function filterWorks(categoryId) {
     if (categoryId === 0) {
@@ -108,8 +108,8 @@ function filterWorks(categoryId) {
 }
 
 /**
- * IIFE to fetch and display works and categories once the script is loaded.
- * This function will run immediately after it is defined.
+ * IIFE to fetch and display works and categories once the script is loaded
+ * This function will run immediately after it is defined
  */
 (async function() {
 
