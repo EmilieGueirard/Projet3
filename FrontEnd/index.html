@@ -9,19 +9,23 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<script src="https://kit.fontawesome.com/80f3db62ee.js" crossorigin="anonymous"></script>
 	
 </head>
 <body>
 <header>
-	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
-	<nav>
-		<ul>
-			<li><a href="#portfolio" class="nav-link">projets</a></li>
-			<li><a href="#contact" class="nav-link">contact</a></li>
-			<li><a href="./login.html" class="nav-link">login</a></li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
-		</ul>
-	</nav>
+	<div class="edition-mode hidden"><i class="fa-regular fa-pen-to-square"></i>Mode édition</div>
+	<div class="topBar">
+		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+		<nav>
+			<ul>
+				<li><a href="#portfolio" class="nav-link">projets</a></li>
+				<li><a href="#contact" class="nav-link">contact</a></li>
+				<li><a href="./login.html" class="nav-link" id="loginLink">login</a></li>		
+				<li><img src="./assets/icons/instagram.png" alt="Instagram" class="logoInsta"></li>
+			</ul>
+		</nav>
+</div>
 </header>
 <main>
 	<section id="introduction">
@@ -38,8 +42,9 @@
 	<section id="portfolio">
 		<div class="projects">
 			<h2>Mes Projets</h2>
+			<div class="modif-projects hidden"><i class="fa-regular fa-pen-to-square"></i>modifier</div>
 		</div>
-		<div class="filters">
+		<div class="filters" id="deletedFilters">
 		</div>
 		<div class="gallery">
 		</div>
@@ -68,5 +73,6 @@
 	</nav>
 </footer>
 <script src="./assets/scripts/index.js"></script>
+<script src="./assets/scripts/logged.js"></script>
 </body>
 </html>
