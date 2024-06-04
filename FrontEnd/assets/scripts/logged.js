@@ -31,7 +31,7 @@ function isTokenPresent()
 function styleModif() 
 {
     editionMode.style.display = "block";
-    topBar.style.margin = "50px";
+    topBar.style.margin = "38px 0 0 0";
     portfolioModif.style.display = "block";
 }
 
