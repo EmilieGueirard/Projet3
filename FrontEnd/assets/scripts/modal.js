@@ -3,6 +3,7 @@ const modal1 = document.getElementById("modal1");
 const modal2 = document.getElementById("modal2");
 const closeModalButtons = document.querySelectorAll(".fa-xmark");
 const openAddPhotoButton = document.querySelector(".modal1-button-add-photo");
+const modalGallery = document.querySelector(".works-modal1");
 const backButton = document.querySelector(".fa-arrow-left");
 const addPhotoForm = document.getElementById("add-work-form");
 
@@ -50,51 +51,91 @@ function closeModal(modal) {
     });
 }
 
-// Fonction pour charger les projets de l'API dans la modale 1
+// Charger les projets de l'API dans la modale 1
 async function modalWorks() {
-    try {
         const response = await fetch("http://localhost:5678/api/works");
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const works = await response.json();
-        const modalGallery = document.querySelector(".works-modal1");
-        modalGallery.innerHTML = ""; 
+        const works = await response.json();       
+        resetModalGallery();
+        works.forEach(work => createModalGallery(work));       
+}
 
-        works.forEach(work => {
-            const article = document.createElement("article");
-            article.setAttribute("data-work-id", work.id);
+// Reset de la gallerie de la modale
+function resetModalGallery()
+{
+    modalGallery.innerHTML = ""; 
+}
 
-            const img = document.createElement("img");
-            img.src = work.imageUrl;
-            img.alt = work.title;
-            article.appendChild(img);
+// Créer la gallerie de la modale
+function createModalGallery(work)
+{
+    const article = document.createElement("article");
+    article.setAttribute("data-work-id", work.id);
 
-            const trashIcon = createTrashIcon(work.id);
-            article.appendChild(trashIcon);
+    const img = document.createElement("img");
+    img.src = work.imageUrl;
+    img.alt = work.title;
+    article.appendChild(img);
 
-            modalGallery.appendChild(article);
-        });
-    } catch (error) {
-        console.error("Erreur lors du chargement des travaux :", error);
-    }
+    const trashIcon = createTrashIcon(work.id);
+    article.appendChild(trashIcon);
+
+    modalGallery.appendChild(article);
 }
 
 // Fonction pour créer une icône de poubelle
 function createTrashIcon(workId) {
     const trashIcon = document.createElement("i");
     trashIcon.classList.add("fa-solid", "fa-trash-can");
-    trashIcon.addEventListener("click", () => deleteWork(workId));
+    trashIcon.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const confirmDelete = confirm("Voulez-vous vraiment supprimer ce projet ?\nAttention ! Cette action est irréversible.");
+        if (confirmDelete) {
+            try {
+                await deleteElement(workId);
+                deleteWorkFromDOM(workId);
+            } catch (error) {
+                console.error("Erreur lors de la suppression du projet :", error);
+            }
+        }
+    });
     return trashIcon;
 }
 
-// Fonction pour supprimer un travail du DOM
-function deleteWork(workId) {
+// Supprime un élément du DOM
+function deleteWorkFromDOM(workId) {
     const workElement = document.querySelector(`article[data-work-id="${workId}"]`);
     if (workElement) {
         workElement.remove();
     }
 }
 
+// Fonction pour supprimer un travail de l'API
+async function deleteElement(workId) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.error("Le token d'authentification est manquant.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur lors de la suppression du projet : ${response.statusText}`);
+        }
+
+        console.log("Projet supprimé avec succès.");
+    } catch (error) {
+        console.error("Erreur lors de la suppression du projet :", error.message);
+    }
+}
+
 // Charger les travaux dans la modale 1 au démarrage
 modalWorks();
+

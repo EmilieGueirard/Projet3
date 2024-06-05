@@ -399,6 +399,7 @@ footer nav ul {
 	top: 26px;
 	right:30px;
 	font-size: 24px;
+	cursor: pointer;
 }
 
 .modal1-title {
@@ -409,12 +410,12 @@ footer nav ul {
 }
 
 .modal1-button-add-photo {
-	height: 36px;
 	background-color: #1D6154; 
 	color: white; 
+	font-family: Syne;
 	border: none; 
 	border-radius: 60px; 
-	padding: 0 39px; 
+	padding: 10px 49px; 
 	cursor: pointer;
 	text-align: center;
 	margin-top: 38px;
@@ -450,6 +451,7 @@ footer nav ul {
 	top: 26px;
 	left:30px;
 	font-size: 21px;
+	cursor: pointer;
 }
 
 .modal2-title {
@@ -460,11 +462,86 @@ footer nav ul {
 }
 
 .form-photo {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
 	background-color: #E8F1F6;
+	padding-bottom: 19px;
+	margin-bottom: 30px;
 	border-radius: 3px;
 }
 
 .works-modal2 {
 	display: flex;
-	margin: 0 105px;
+	padding: 0 105px;
+	
+}
+
+.work-submit-js {
+	width: 420px;
+	padding-bottom: 47px;
+	margin-bottom: 32px;
+	border-bottom: 1px solid lightgrey;
+}
+
+.modal2-button-add-photo {
+	color: #306685;
+	background-color: #CBD6DC;
+	padding: 10px 33px;
+	margin-bottom: 7px;
+	border-radius: 50px;
+	z-index: 1; 
+	cursor: pointer;
+  }
+
+  .fa-image:before {
+	font-size: 76px;
+	color: #CBD6DC;
+}
+
+.fa-image { 
+	margin-top: 13px;
+	margin-bottom: 6px;
+}
+
+.work-photo-js {
+	display: none;
+}
+
+.form-title {
+	display: flex;
+	flex-direction: column;
+	color: #3D3D3D;
+	margin-bottom: 21px;
+}
+
+.work-title-js { 
+	width: 98%;
+	height: 51px;
+	padding: 5px;
+	margin-top: 10px;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.form-categories {
+	color: #3D3D3D;
+}
+
+#categories {
+	width: 100%;
+	height: 51px;
+	margin-top: 10px;
+	border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#button-submit {
+	font-family: Syne;
+	color: white;
+	width: 237px;
+	border-radius: 60px;
+	padding: 10px 49px;
+	border: none;
+	background-color: #A7A7A7;
 }
