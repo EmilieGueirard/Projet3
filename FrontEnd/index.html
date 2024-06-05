@@ -28,6 +28,7 @@
 </div>
 </header>
 <main>
+
 	<section id="introduction">
 		<figure>
 			<img src="./assets/images/sophie-bluel.png" alt="">
@@ -39,17 +40,62 @@
 			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice).</p>
 		</article>
 	</section>
+
 	<section id="portfolio">
 		<div class="projects">
 			<h2>Mes Projets</h2>
-			<div class="modif-projects hidden"><i class="fa-regular fa-pen-to-square"></i>modifier</div>
+			<a href="#modal1" class="modif-projects hidden"><i class="fa-regular fa-pen-to-square"></i>modifier</a>
 		</div>
 		<div class="filters" id="deletedFilters">
 		</div>
 		<div class="gallery">
-		</div>
-				
+		</div>			
 	</section>
+
+	<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal1-title" style="display: none;">
+		<div class="modal-wrapper">
+			<i class="fa-solid fa-xmark"></i>
+			<h3 class="modal1-title">Galerie photo</h3>
+			<div class="works-modal1">
+			</div>
+			<div>
+				<button class="modal1-button-add-photo">Ajouter une photo</button>
+			</div>
+		</div>
+	</aside>
+
+	<aside id="modal2" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal2-title" style="display: none;">
+		<div class="modal-wrapper">
+			<i class="fa-solid fa-arrow-left"></i>
+			<i class="fa-solid fa-xmark"></i>
+			<h3 class="modal2-title">Ajout photo</h3>
+			<div class="works-modal2">
+					<form class="work-submit-js" id="add-work-form" target="">
+							<div class="form-photo">
+									<i class="fa-regular fa-image"></i>
+									<label for="input-file" class="modal2-button-add-photo">
+											+ Ajouter photo	
+											<input type="file" class="work-photo-js" id="input-file" accept="image/jpeg, image/png" size="4194304">
+									</label>
+									<p class="p-photo">jpg, png : 4mo max</p>
+							</div>
+
+							<div class="form-title">
+									<label for="input-title">Titre</label>
+									<input type="text" name="titre" id="input-title" class="work-title-js">
+							</div>
+
+							<div class="form-categories">
+									<label for="categories">Catégorie</label><br>
+									<select id="categories"></select>
+							</div>
+			</div>
+							<input type="button" value="Valider" id="button-submit">
+					</form>
+		</div>
+	</aside>
+
+
 	<section id="contact">
 		<h2>Contact</h2>
 		<p>Vous avez un projet ? Discutons-en !</p>
@@ -74,5 +120,6 @@
 </footer>
 <script src="./assets/scripts/index.js"></script>
 <script src="./assets/scripts/logged.js"></script>
+<script src="./assets/scripts/modal.js"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@ const portfolioModif = document.querySelector(".modif-projects");
 const loginLogoutLink = document.getElementById("loginLink");
 
 // Appeler displayEditionMode lors du chargement de la page
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
     displayEditionMode();
 });
 
@@ -58,6 +58,5 @@ function logout()
     window.location.href = "./index.html";
     })
 }
-
 
 
