@@ -6,13 +6,14 @@ const openAddPhotoButton = document.querySelector(".modal1-button-add-photo");
 const modalGallery = document.querySelector(".works-modal1");
 const backButton = document.querySelector(".fa-arrow-left");
 const addPhotoForm = document.getElementById("add-work-form");
+const categorySelect = document.getElementById("categories");
 
-//Ajouter un écouteur d'événements pour ouvrir la modale
+// Ajouter un écouteur d'événements pour ouvrir la modale
 modifProjectsButton.addEventListener("click", () => {
     openModal(modal1);
 });
 
-//Ajouter un écouteur d'événements pour fermer les modales
+// Ajouter un écouteur d'événements pour fermer les modales
 closeModalButtons.forEach(button => {
     button.addEventListener("click", closeModal);
 });
@@ -36,14 +37,14 @@ window.addEventListener("click", (event) => {
     }
 });
 
-// Ouvrir modale
+// Ouvre la modale spécifiée
 function openModal(modal) {
     modal.style.display = null;
     modal.setAttribute("aria-hidden", "false");
 }
 
-// Fermer modale
-function closeModal(modal) {
+// Ferme toutes les modales
+function closeModal() {
     const modals = document.querySelectorAll(".modal");
     modals.forEach(modal => {
         modal.style.display = "none";
@@ -51,23 +52,37 @@ function closeModal(modal) {
     });
 }
 
-// Charger les projets de l'API dans la modale 1
+// Charge les projets de l'API dans la modale 1
 async function modalWorks() {
-        const response = await fetch("http://localhost:5678/api/works");
-        const works = await response.json();       
-        resetModalGallery();
-        works.forEach(work => createModalGallery(work));       
+    const response = await fetch("http://localhost:5678/api/works");
+    const works = await response.json();       
+    resetModalGallery();
+    works.forEach(work => createModalGallery(work));       
 }
 
-// Reset de la gallerie de la modale
-function resetModalGallery()
-{
+// Charge les catégories de l'API et les ajoute au formulaire
+async function loadCategories() {
+    try {
+        const response = await fetch("http://localhost:5678/api/categories");
+        const categories = await response.json();
+        categories.forEach(category => {
+            const option = document.createElement("option");
+            option.value = category.id;
+            option.textContent = category.name;
+            categorySelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Erreur lors du chargement des catégories :", error);
+    }
+}
+
+// Réinitialise la galerie de la modale
+function resetModalGallery() {
     modalGallery.innerHTML = ""; 
 }
 
-// Créer la gallerie de la modale
-function createModalGallery(work)
-{
+// Crée la galerie de la modale avec les travaux fournis
+function createModalGallery(work) {
     const article = document.createElement("article");
     article.setAttribute("data-work-id", work.id);
 
@@ -82,26 +97,40 @@ function createModalGallery(work)
     modalGallery.appendChild(article);
 }
 
-// Fonction pour créer une icône de poubelle
+// Crée une icône de poubelle pour supprimer un travail
 function createTrashIcon(workId) {
     const trashIcon = document.createElement("i");
     trashIcon.classList.add("fa-solid", "fa-trash-can");
-    trashIcon.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const confirmDelete = confirm("Voulez-vous vraiment supprimer ce projet ?\nAttention ! Cette action est irréversible.");
-        if (confirmDelete) {
-            try {
-                await deleteElement(workId);
-                deleteWorkFromDOM(workId);
-            } catch (error) {
-                console.error("Erreur lors de la suppression du projet :", error);
-            }
-        }
-    });
+    trashIcon.addEventListener("click", handleTrashIconClick.bind(null, workId));
     return trashIcon;
 }
 
-// Supprime un élément du DOM
+// Gère le clic sur l'icône de poubelle
+function handleTrashIconClick(workId, e) {
+    e.preventDefault();
+    if (confirmDeletion()) {
+         setTimeout(() => {
+            deleteWorkById(workId);
+        }, 0);
+    }
+}
+
+// Affiche une boîte de dialogue de confirmation pour la suppression
+function confirmDeletion() {
+    return confirm("Voulez-vous vraiment supprimer ce projet ?\nAttention ! Cette action est irréversible.");
+}
+
+// Supprime un travail par son ID
+async function deleteWorkById(workId) {
+    try {
+        await deleteWork(workId);
+        deleteWorkFromDOM(workId);
+    } catch (error) {
+        console.error("Erreur lors de la suppression du projet :", error);
+    }
+}
+
+// Supprime un élément du DOM par son ID de travail
 function deleteWorkFromDOM(workId) {
     const workElement = document.querySelector(`article[data-work-id="${workId}"]`);
     if (workElement) {
@@ -109,15 +138,19 @@ function deleteWorkFromDOM(workId) {
     }
 }
 
-// Fonction pour supprimer un travail de l'API
-async function deleteElement(workId) {
+// Récupère et valide le token d'authentification
+function getToken() {
     const token = localStorage.getItem("token");
     if (!token) {
-        console.error("Le token d'authentification est manquant.");
-        return;
+        throw new Error("Le token d'authentification est manquant.");
     }
+    return token;
+}
 
+// Supprime un travail quand le token est récupéré
+async function deleteWork(workId) {
     try {
+        const token = getToken();
         const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
             method: "DELETE",
             headers: {
@@ -136,6 +169,18 @@ async function deleteElement(workId) {
     }
 }
 
-// Charger les travaux dans la modale 1 au démarrage
+// Vérifie si la taille du fichier est max 4Mo
+document.getElementById('input-file').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const maxSize = 4 * 1024 * 1024; 
+    if (file.size > maxSize) {
+        alert("La taille du fichier dépasse 4 Mo. Veuillez choisir un fichier plus petit.");
+        event.target.value = ""; 
+    }
+});
+
+// Charge les travaux dans la modale 1 au démarrage
 modalWorks();
 
+// Charge les catégories dans la modale 2 au démarrage
+loadCategories();

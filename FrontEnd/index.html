@@ -54,7 +54,7 @@
 
 	<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal1-title" style="display: none;">
 		<div class="modal-wrapper">
-			<i class="fa-solid fa-xmark"></i>
+			<i class="fa-solid fa-xmark" aria-hidden="true"></i>
 			<h3 class="modal1-title">Galerie photo</h3>
 			<div class="works-modal1">
 			</div>
@@ -66,16 +66,16 @@
 
 	<aside id="modal2" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal2-title" style="display: none;">
 		<div class="modal-wrapper">
-			<i class="fa-solid fa-arrow-left"></i>
-			<i class="fa-solid fa-xmark"></i>
+			<i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+			<i class="fa-solid fa-xmark" aria-hidden="true"></i>
 			<h3 class="modal2-title">Ajout photo</h3>
 			<div class="works-modal2">
 					<form class="work-submit-js" id="add-work-form" target="">
 							<div class="form-photo">
-									<i class="fa-regular fa-image"></i>
+									<i class="fa-regular fa-image" aria-hidden="true"></i>
 									<label for="input-file" class="modal2-button-add-photo">
 											+ Ajouter photo	
-											<input type="file" class="work-photo-js" id="input-file" accept="image/jpeg, image/png" size="4194304">
+											<input type="file" class="work-photo-js" id="input-file" accept="image/jpeg, image/png">
 									</label>
 									<p class="p-photo">jpg, png : 4mo max</p>
 							</div>
@@ -88,6 +88,7 @@
 							<div class="form-categories">
 									<label for="categories">Catégorie</label><br>
 									<select id="categories"></select>
+									<i class="fa-solid fa-chevron-down select-icon" aria-hidden="true"></i>
 							</div>
 			</div>
 							<input type="button" value="Valider" id="button-submit">
