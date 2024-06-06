@@ -8,30 +8,37 @@ form.addEventListener("submit", handleFormSubmit);
 
 async function handleFormSubmit(e) {
     e.preventDefault();
-    clearErrorsMessages();
 
-    const errors = validateInputs();
-    if (Object.keys(errors).length > 0) {
-        displayErrorsMessages(errors);
+    if (!validateForm()) {
         return;
     }
 
     const { emailValue, passwordValue } = getFormValues();
-    try {
-        const response = await authenticateUser(emailValue, passwordValue);
-        handleAuthenticationResponse(response);
-    } catch (error) {
-        console.error("Erreur lors de l'authentification :", error);
-        displayGlobalErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.");
+    await processAuthentication(emailValue, passwordValue);
+}
+
+// Valider le formulaire et gérer les erreurs
+function validateForm() {
+    clearErrorsMessages();
+    const errors = validateInputs();
+    return !hasErrors(errors);
+}
+
+// Vérifier si le formulaire contient des erreurs
+function hasErrors(errors) {
+    if (Object.keys(errors).length > 0) {
+        displayErrorsMessages(errors);
+        return true;
     }
+    return false;
 }
 
 // Valider les entrées du formulaire
 function validateInputs() {
     const emailValue = email.value.trim();
     const passwordValue = password.value.trim();
-
     const errors = {};
+
     errorEmail(emailValue, errors);
     errorPassword(passwordValue, errors);
 
@@ -44,6 +51,17 @@ function getFormValues() {
         emailValue: email.value.trim(),
         passwordValue: password.value.trim()
     };
+}
+
+// Traiter l'authentification
+async function processAuthentication(email, password) {
+    try {
+        const response = await authenticateUser(email, password);
+        handleAuthenticationResponse(response);
+    } catch (error) {
+        console.error("Erreur lors de l'authentification :", error);
+        displayGlobalErrorMessage("Une erreur est survenue. Veuillez réessayer plus tard.");
+    }
 }
 
 // error email
