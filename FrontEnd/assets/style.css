@@ -419,6 +419,12 @@ footer nav ul {
     margin-bottom: 45px;
 	text-decoration: none;
 	cursor: pointer;
+	transition: background-color 0.6s, transform 0.6s;
+}
+
+.addPhotoButton:hover {
+	background-color: #0E2F28;
+	
 }
 
 .fa-trash-can {
@@ -450,4 +456,73 @@ footer nav ul {
     left:30px;
     font-size: 21px;
     cursor: pointer;
+}
+
+/* Modal 3 : Message de confirmation */
+
+.modal-content3 {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 430px;
+    height: 300px;
+    padding: 45px 30px 45px 30px;
+    box-sizing: border-box;
+}
+
+.confirmation-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+	border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1500; /* Assurez-vous que ce z-index est plus élevé que celui de la modale de galerie */
+}
+
+.confirmButton{
+	font-family: Syne;
+    color: white;
+	background-color: #1D6154;  
+    text-align: center;
+    border: none;
+	width: 120px; 
+    border-radius: 60px; 
+    padding: 10px 20px;
+    margin-top: 38px;
+	margin-left: 10px;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color 0.6s, transform 0.6s;
+}
+
+.cancelButton {
+	font-family: Syne;
+    color: white;
+	background-color: #A7A7A7;
+    text-align: center;
+    border: none;
+	width: 120px; 
+    border-radius: 60px; 
+    padding: 10px 20px; 
+    margin-top: 38px;
+	margin-right: 10px;
+	text-decoration: none;
+	cursor: pointer;
+	transition: background-color 0.8s, transform 0.8s;
+}
+
+.cancelButton:hover {
+	background: #0E2F28;
+}
+
+.confirmButton:hover {
+	background: #0E2F28;
+}
+
+.modal-content3 p {
+	text-align: center;
+	font-size: 16px;
 }
