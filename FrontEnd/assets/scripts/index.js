@@ -50,8 +50,7 @@ function createWorks(works)
 /**
  * Creates an HTML Node for a single work and appends it to the gallery
  * @param {Object} work - The work object to create an HTML node for
- * @param {string} work.imageUrl - The URL of the work's image
- * @param {string} work.title - The title of the work
+ * 
  */
 function createWork(work)
 {
@@ -83,8 +82,7 @@ function createCategories(categories)
 /**
  * Creates a button for a single category and appends it to the filters element
  * @param {Object} category - The category object to create a button
- * @param {string} category.name - The name of the category
- * @param {number} category.id - The ID of the category
+ * return void
  */
 function createCategory(category)
 {
