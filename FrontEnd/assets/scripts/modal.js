@@ -588,7 +588,6 @@ function validateSelectCategories(select) {
 }
 
 
-
 // Modale 2 : Activer ou désactiver Submit Button du formulaire
 function updateSubmitButton() {
     const photoInput = document.getElementById("input-file");
@@ -618,7 +617,6 @@ function hideFieldError(field) {
     const errorContainer = parentDiv.querySelector(".error-message");
     errorContainer.textContent = "";
 }
-
 
 /*********************************************************************************/
 //****************                  MODALE 3                    ******************/
@@ -701,3 +699,5 @@ function preventModalClose(confirmationModal) {
         event.stopPropagation();
     });
 }
+
+

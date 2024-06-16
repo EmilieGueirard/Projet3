@@ -313,10 +313,10 @@ footer nav ul {
 
   
 /******************* Error Message *******************/
-.error-message, .global-error-message {
+.error-message {
     color: red;
-    margin-bottom: 20px; 
-	margin-top: -23px; 
+    margin-bottom: 6px; 
+	margin-top: -20px;
 }
 
 /******************* Mode Edition *******************/
