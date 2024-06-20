@@ -31,13 +31,6 @@ function modalGallery() {
     let body = document.createElement('div');
         body.classList.add('gallery-body');
 
-    let article = document.createElement('article');
-        
-    let img = document.createElement('img');
-       
-    body.appendChild(article);
-    body.appendChild(img);
-
     let btn = document.createElement('button');
     btn.textContent = "Ajouter une photo";
     btn.dataset.modal = 'addPhoto';
@@ -52,7 +45,97 @@ function modalGallery() {
         body: body,
         footer: footer
     });
+
+    fetchAndDisplayWorks();
 }
+
+// Fonction pour récupérer et afficher les travaux dans la modale gallery
+async function fetchAndDisplayWorks() {
+    const works = await fetchWorks();
+    createAndDisplayWorks(works);
+}
+
+// Récupérer les travaux depuis l'API
+async function fetchWorks() {
+    return await httpGet(works_url);
+}
+
+// Créer et ajouter les travaux à la modale Gallery
+function createAndDisplayWorks(works) {
+    resetWorksModalGallery();
+    const galleryBody = document.querySelector('.gallery-body');
+    works.forEach(work => {
+        const article = document.createElement('article');
+        const img = document.createElement('img');
+        
+        img.src = work.imageUrl;
+        
+        article.appendChild(img);
+        addTrashIcon(article);
+        galleryBody.appendChild(article);
+    });
+}
+
+// Ajouter icône poubelle à un article
+function addTrashIcon(article) {
+    const trashIcon = document.createElement('i');
+    trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon');
+    
+    article.appendChild(trashIcon);
+    trashIconClick(trashIcon, article);
+}
+
+// Evenement au click icone poubelle
+function trashIconClick(trashIcon, article) {
+    trashIcon.addEventListener('click', () => {
+        showConfirmationModal(article);
+});
+}
+
+// Fonction pour créer et afficher la modale de confirmation
+function showConfirmationModal(article) {
+    let header = document.createElement('div');
+        header.textContent = "Confirmation";
+        header.classList.add('modal-title-header');
+
+    let body = document.createElement('div');
+        body.textContent = "Êtes-vous sûr de vouloir supprimer ce projet ?";
+        body.classList.add('modal-body');
+
+    let footer = document.createElement('div');
+        footer.classList.add('modal-footer');
+
+    let cancelButton = document.createElement('button');
+        cancelButton.textContent = "Annuler";
+        cancelButton.classList.add('modal-btn', 'cancel-btn');
+        cancelButton.addEventListener('click', closeModal);
+
+    let confirmButton = document.createElement('button');
+        confirmButton.textContent = "Confirmer";
+        confirmButton.classList.add('modal-btn', 'confirm-btn');
+        confirmButton.addEventListener('click', () => {
+        // Ajouter la logique de suppression ici
+        console.log('Projet supprimé:', article);
+        closeModal();
+    });
+
+    footer.append(cancelButton, confirmButton);
+
+    createModal({
+        header: header,
+        body: body,
+        footer: footer
+    });
+}
+
+
+// Réinitialiser le contenu de gallery-body
+function resetWorksModalGallery() {
+    const galleryBody = document.querySelector('.gallery-body');
+    galleryBody.innerHTML = ''; 
+}
+
+
 
 // Création Modal Add Photo
 function modalAddPhoto() {
@@ -90,10 +173,7 @@ function openModal(modal) {
 // Fermer modale
 function closeModal() {
     const modal = document.querySelector('.modal');
-    if (modal) {
-        modal.style.display = 'none';
-        modal.innerHTML = '';
-    }
+    modal && (modal.style.display = 'none', modal.innerHTML = '');
 }
 
 // Fermer modale en cliquant sur window
