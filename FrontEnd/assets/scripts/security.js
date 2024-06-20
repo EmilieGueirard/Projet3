@@ -1,18 +1,18 @@
-"use strict";
+'use strict';
 
 const authentication_url = 'http://localhost:5678/api/users/login';
 const store = sessionStorage;
 const form = document.querySelector('#loginForm');
-const topBar = document.querySelector(".topBar");
+const topBar = document.querySelector('.topBar');
 const loginLogoutLink = document.getElementById("loginLink");
 
 // Ajouter le lien de connexion/déconnexion à la barre de navigation et afficher le mode édition si token présent
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener('DOMContentLoaded', function() {
     addAuthLink();
     displayEditionMode();
 });
 
-form?.addEventListener("submit", async (event) => {
+form?.addEventListener('submit', async (event) => {
     event.preventDefault();
     hideError();
 
@@ -26,17 +26,9 @@ form?.addEventListener("submit", async (event) => {
 
 // Traiter la réponse de l'authentification
 function processAuthenticationResponse(response) {
-    if (!response.userId) {
-        handleAuthenticationError("Erreur dans l’identifiant ou le mot de passe");
-        return;
-    }
+    !response?.userId && handleAuthenticationError("Erreur dans l’identifiant ou le mot de passe");
 
-    if (response.token) {
-        handleAuthenticationSuccess(response.token);
-        return;
-    }
-
-    handleAuthenticationError("Une erreur est survenue");
+    response?.userId && (response?.token ? handleAuthenticationSuccess(response.token): handleAuthenticationError("Une erreur est survenue"));
 }
 
 // Gérer le succès de l'authentification
@@ -77,10 +69,8 @@ function isAuthenticated() {
 function addAuthLink() {
     const navList = document.querySelector('nav ul');
     const authLink = createAuthLink();
-    insertAuthLink(navList, authLink);
-    if (isAuthenticated()) {
-        setLogoutLink(authLink);
-    }
+    navList && insertAuthLink(navList, authLink);
+    isAuthenticated() && setLogoutLink(authLink);
 }
 
 // Créer la structure du lien de connexion
@@ -118,25 +108,21 @@ function logout() {
 
 // Afficher mode édition complet quand token présent
 function displayEditionMode() {
-    if (isAuthenticated()) {
-        styleModif();
-        deleteFilters();
-        addModifyLink();
-    }
+    isAuthenticated() && (styleModif(), deleteFilters(), addModifyLink());
 }
 
 // Changement du style de la page 
 function styleModif() {
-    const editionMode = document.createElement("div");
-    editionMode.classList.add("editionMode");
+    const editionMode = document.createElement('div');
+    editionMode.classList.add('editionMode');
 
-    const icon = document.createElement("i");
-    icon.classList.add("fa-regular", "fa-pen-to-square");
+    const icon = document.createElement('i');
+    icon.classList.add('fa-regular', 'fa-pen-to-square');
 
     const editionText = document.createElement("p");
     editionText.textContent = "Mode édition";
 
-    topBar.style.margin = "38px 0 0 0";
+    topBar.style.margin = '38px 0 0 0';
 
     editionMode.appendChild(icon);
     editionMode.appendChild(editionText);
@@ -145,24 +131,22 @@ function styleModif() {
 
 // Supprimer les filtres
 function deleteFilters() {
-    const deletedFilters = document.querySelector(".filters");
-    if (deletedFilters) {
-        deletedFilters.remove();
-    }
+    document.querySelector('.filters')?.remove();
 }
 
 // Créer le lien : icône + Modifier
 function addModifyLink() {
-    const projectsSection = document.querySelector("#portfolio .projects");
+    const projectsSection = document.querySelector('#portfolio .projects');
 
-    const modifyLink = document.createElement("a");
-    modifyLink.href = "#modal";
-    modifyLink.classList.add("modify-link");
+    const modifyLink = document.createElement('a');
+    modifyLink.href = '#modal';
+    modifyLink.dataset.modal = 'gallery';
+    modifyLink.classList.add('modify-link');
 
-    const icon = document.createElement("i");
-    icon.classList.add("fa-regular", "fa-pen-to-square");
+    const icon = document.createElement('i');
+    icon.classList.add('fa-regular', 'fa-pen-to-square');
 
-    const linkText = document.createTextNode(" modifier");
+    const linkText = document.createTextNode("modifier");
 
     modifyLink.appendChild(icon);
     modifyLink.appendChild(linkText);

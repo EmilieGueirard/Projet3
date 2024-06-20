@@ -352,11 +352,11 @@ footer nav ul {
     color: black;
 }
 
-
-/******************** Modal ********************/
+/******************* Modal *******************/
 
 .modal {
     display: none;
+	
     position: fixed; 
     justify-content: center;
     align-items: center;
@@ -369,8 +369,9 @@ footer nav ul {
 }
 
 .modal-content {
-	display: flex;
+    display: flex;
     flex-direction: column;
+	justify-content: space-between;
     align-items: center;
     position: relative;
     width: 630px;
@@ -381,81 +382,16 @@ footer nav ul {
     box-sizing: border-box;
 }
 
-.close {
-	position: absolute;
+.icon-close {
+    position: absolute;
     top: 26px;
     right:30px;
     font-size: 24px;
     cursor: pointer;
-	color: black;
+    color: black;
 }
 
-/* Modal 1 : Gallery Photo */
-.modalTitle {
-    text-align: center;
-    font-size: 26px;
-    margin-top: 10px;
-    margin-bottom: 46px;
-}
-
-.worksModal1 { 
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding-bottom: 68px;
-    border-bottom: 1px solid lightgrey;
-}
-
-.addPhotoButton {
-	font-family: Syne;
-    color: white;
-	background-color: #1D6154;  
-    text-align: center;
-    border: none; 
-    border-radius: 60px; 
-    padding: 10px 49px; 
-    margin-top: 38px;
-    margin-bottom: 45px;
-	text-decoration: none;
-	cursor: pointer;
-	transition: background-color 0.6s, transform 0.6s;
-}
-
-.addPhotoButton:hover {
-	background-color: #0E2F28;
-	
-}
-
-.fa-trash-can {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    font-size: 11px;
-    border-radius: 3px;
-    padding: 4px;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-}
-
-.worksModal1 article {
-    position: relative;
-}
-
-.worksModal1 img {
-    width: 100%;
-    height: 100px;
-}
-
-/* Modal 2 : Add Photo */
-
-.formDiv {
-	border-bottom: 1px solid lightgrey;
-	width: 420px;
-}
-
-.backButton {
+.icon-back {
 	position: absolute;
     top: 26px;
     left:30px;
@@ -463,222 +399,28 @@ footer nav ul {
     cursor: pointer;
 }
 
-#form-button-submit {
-    font-family: Syne;
-    color: white;
-    width: 237px;
-    border-radius: 60px;
-    padding: 10px 49px;
-    border: none;
-    background-color: #A7A7A7;
-	margin-top: 32px;
-	transition: background-color 0.6s, transform 0.6s;
-}
-
-#form-button-submit:not([disabled]) {
-    cursor: pointer;
-}
-
-.form-add-photo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #E8F1F6;
-    padding-bottom: 19px;
-    margin-bottom: 30px;
-    border-radius: 3px;
-	width: 100%;
-	height: 169px;
-	box-sizing: border-box;
-}
-
-.form-add-work {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
-.form-button-add-photo {
-    color: #306685;
-    background-color: #CBD6DC;
-    padding: 10px 33px;
-    margin-bottom: 7px;
-    border-radius: 50px;
-    z-index: 1; 
-    cursor: pointer;
-	transition: background-color 0.6s, transform 0.6s;
-  }
-
-  .form-button-add-photo:hover { 
-    background-color: #A7A7A7;
-	color: #FFF;
-  }
-
-.fa-image:before {
-    font-size: 76px;
-    color: #CBD6DC;
-}
-
-.fa-image { 
-    margin-top: 13px;
-    margin-bottom: 6px;
-}
-
-.form-work-photo {
-    display: none;
-}
-
-.trash-icon-preview {
-    position: absolute;
-    top: 150px;
-    right: 115px;
-    font-size: 11px;
-    border-radius: 3px;
-    padding: 4px;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-}
-
-.file-error-message {
-	color: red;
-	margin-top: 25px;
-}
-
-.form-title .error-message, .form-categories .error-message {
-	margin-left: 10px;
-	margin-top: 5px;
-	margin-bottom: -10px;
-}
-
-.form-add-photo .error-message {
-	margin-top: 25px;
-}
-
-.form-title {
-    display: flex;
-    flex-direction: column;
-    color: #3D3D3D;
-    margin-bottom: 21px;
-	width: 100%;
-}
-
-.form-title-work { 
-    width: 100%;
-    height: 51px;
-    padding: 16px;
-    margin-top: 10px;
-    border: none;
-    color: #444;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-    box-sizing: border-box;
-}
-
-.form-categories {
-    position: relative;
-    width: 100%;
-    color: #3D3D3D;
-	margin-bottom: 47px;
-}
-
-.form-categories select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-.form-categories .select-icon {
-    position: absolute;
-    top: 42px;
-    right: 30px;
-    pointer-events: none;
-    font-size: 16px;
-    color: #3D3D3D;
-}
-
-#categories {
-    width: 100%;
-    height: 51px;
-    margin-top: 10px;
-    padding: 16px 60px 16px 16px;
-    border: none;
-    color: #444;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-    box-sizing: border-box;
-}
-
-
-/* Modal 3 : Message de confirmation */
-
-.modal-content3 {
-	display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    width: 430px;
-    height: 300px;
-    padding: 45px 30px 45px 30px;
-    box-sizing: border-box;
-}
-
-.confirmation-modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-	border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    z-index: 1500; /* Assurez-vous que ce z-index est plus élevé que celui de la modale de galerie */
-}
-
-.confirmButton{
+.gallery-btn {
 	font-family: Syne;
     color: white;
-	background-color: #1D6154;  
-    text-align: center;
-    border: none;
-	width: 120px; 
+    background-color: #1D6154;  
+    border: none; 
     border-radius: 60px; 
-    padding: 10px 20px;
+    padding: 10px 49px; 
     margin-top: 38px;
-	margin-left: 10px;
-	text-decoration: none;
+   
 	cursor: pointer;
-	transition: background-color 0.6s, transform 0.6s;
+    transition: background-color 0.6s, transform 0.6s;
 }
 
-.cancelButton {
-	font-family: Syne;
-    color: white;
-	background-color: #A7A7A7;
-    text-align: center;
-    border: none;
-	width: 120px; 
-    border-radius: 60px; 
-    padding: 10px 20px; 
-    margin-top: 38px;
-	margin-right: 10px;
-	text-decoration: none;
-	cursor: pointer;
-	transition: background-color 0.8s, transform 0.8s;
+.gallery-btn:hover {
+	background-color: #0E2F28;
+
 }
 
-.cancelButton:hover {
-	background: #0E2F28;
-}
+.modal-title-header {
+	text-align: center;
+    font-size: 26px;
+    margin-top: 10px;
+    margin-bottom: 46px;
 
-.confirmButton:hover {
-	background: #0E2F28;
-}
-
-.message1 {
-	font-size: 16px;
-	margin-bottom: 5px;
-}
-
-.message2 {
-	font-size: 16px;
-	font-weight: 900;
 }

@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Fetches data from the provided URL and returns it
  * @param {string} url - The URL to fetch data from
@@ -19,7 +21,7 @@ async function httpGet(url)
 async function httpPost(url, data, headers={})
 {
     headers = Object.assign(headers, { 
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
     });
 
     try {
@@ -36,9 +38,7 @@ async function httpPost(url, data, headers={})
         return [];
     }
 }
-
-
+ 
 function redirectTo(url) {
     window.location.href = url;
 }
-
