@@ -1,9 +1,19 @@
-
 'use strict';
 
 const works_url = 'http://localhost:5678/api/works';
 
+const token = sessionStorage.getItem('token');
 
+// Créer les conteneurs de modales
+const galleryModal = document.createElement('div');
+galleryModal.classList.add('modal', 'gallery-modal');
+document.body.appendChild(galleryModal);
+
+const confirmationModal = document.createElement('div');
+confirmationModal.classList.add('modal', 'confirmation-modal');
+document.body.appendChild(confirmationModal);
+
+// Ajouter les déclencheurs pour ouvrir les modales
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('[data-modal]')?.forEach(trigger => {
         trigger.addEventListener('click', event => {
@@ -24,40 +34,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Création modal Gallery Photo
 function modalGallery() {
-    let header = document.createElement('div');
-        header.textContent = "Galerie photo";
-        header.classList.add('modal-title-header');
-
     let body = document.createElement('div');
-        body.classList.add('gallery-body');
+    body.classList.add('gallery-body');
 
     let btn = document.createElement('button');
     btn.textContent = "Ajouter une photo";
     btn.dataset.modal = 'addPhoto';
-    btn.classList.add('gallery-btn')
+    btn.classList.add('gallery-btn');
     btn.addEventListener('click', modalAddPhoto);
 
-    let footer = document.createElement('div');
-    footer.append(btn);
-
     createModal({
-        header: header,
+        header: "Galerie photo",
         body: body,
-        footer: footer
-    });
+        footer: btn
+    }, '.gallery-modal');
 
-    fetchAndDisplayWorks();
-}
-
-// Fonction pour récupérer et afficher les travaux dans la modale gallery
-async function fetchAndDisplayWorks() {
-    const works = await fetchWorks();
     createAndDisplayWorks(works);
-}
-
-// Récupérer les travaux depuis l'API
-async function fetchWorks() {
-    return await httpGet(works_url);
 }
 
 // Créer et ajouter les travaux à la modale Gallery
@@ -66,10 +58,11 @@ function createAndDisplayWorks(works) {
     const galleryBody = document.querySelector('.gallery-body');
     works.forEach(work => {
         const article = document.createElement('article');
+        article.setAttribute('data-work-id', work.id);
         const img = document.createElement('img');
-        
+
         img.src = work.imageUrl;
-        
+
         article.appendChild(img);
         addTrashIcon(article);
         galleryBody.appendChild(article);
@@ -80,7 +73,7 @@ function createAndDisplayWorks(works) {
 function addTrashIcon(article) {
     const trashIcon = document.createElement('i');
     trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon');
-    
+
     article.appendChild(trashIcon);
     trashIconClick(trashIcon, article);
 }
@@ -89,45 +82,62 @@ function addTrashIcon(article) {
 function trashIconClick(trashIcon, article) {
     trashIcon.addEventListener('click', () => {
         showConfirmationModal(article);
-});
+    });
 }
 
 // Fonction pour créer et afficher la modale de confirmation
 function showConfirmationModal(article) {
-    let header = document.createElement('div');
-        header.textContent = "Confirmation";
-        header.classList.add('modal-title-header');
-
-    let body = document.createElement('div');
-        body.textContent = "Êtes-vous sûr de vouloir supprimer ce projet ?";
-        body.classList.add('modal-body');
-
-    let footer = document.createElement('div');
-        footer.classList.add('modal-footer');
+    let footer = document.createElement('div'); 
+    footer.classList.add('modal-footer');
 
     let cancelButton = document.createElement('button');
-        cancelButton.textContent = "Annuler";
-        cancelButton.classList.add('modal-btn', 'cancel-btn');
-        cancelButton.addEventListener('click', closeModal);
+    cancelButton.textContent = "Annuler";
+    cancelButton.classList.add('modal-btn', 'cancel-btn');
+    cancelButton.addEventListener('click', () => closeModal('.confirmation-modal'));
 
     let confirmButton = document.createElement('button');
-        confirmButton.textContent = "Confirmer";
-        confirmButton.classList.add('modal-btn', 'confirm-btn');
-        confirmButton.addEventListener('click', () => {
-        // Ajouter la logique de suppression ici
-        console.log('Projet supprimé:', article);
-        closeModal();
+    confirmButton.textContent = "Confirmer";
+    confirmButton.classList.add('modal-btn', 'confirm-btn');
+    confirmButton.addEventListener('click', async () => {
+        closeModal('.confirmation-modal');
+        const workId = article.getAttribute('data-work-id');
+        const success = await deleteWork(workId);
+        if (success) {
+            works = await fetchWorks();
+            createAndDisplayWorks(works); 
+            createWorks(works); 
+        }
     });
 
     footer.append(cancelButton, confirmButton);
 
     createModal({
-        header: header,
-        body: body,
+        header: "Confirmation",
+        body: "Êtes-vous sûr de vouloir supprimer ce projet ?",
         footer: footer
-    });
+    }, 'small-modal', '.confirmation-modal'); 
 }
 
+// Ajouter cette fonction dans modal.js
+async function deleteWork(workId) {
+    const response = await fetch(`${works_url}/${workId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (response.ok) {
+        return true;
+    } else {
+        console.error("Erreur lors de la suppression du projet");
+        return false;
+    }
+}
+
+// Récupérer les travaux depuis l'API
+async function fetchWorks() {
+    return await httpGet(works_url);
+}
 
 // Réinitialiser le contenu de gallery-body
 function resetWorksModalGallery() {
@@ -135,11 +145,8 @@ function resetWorksModalGallery() {
     galleryBody.innerHTML = ''; 
 }
 
-
-
 // Création Modal Add Photo
 function modalAddPhoto() {
- 
     let header = document.createElement('div');
     header.textContent = "Ajout photo";
     header.classList.add('modal-title-header');
@@ -150,7 +157,7 @@ function modalAddPhoto() {
     createModal({
         header: header,
         body: body,
-    });
+    }, '.gallery-modal');
 
     iconBack();
 }
@@ -159,9 +166,9 @@ function modalAddPhoto() {
 function iconBack() {
     let modalContent = document.querySelector('.modal-content');
     let iconBack = document.createElement('i');
-        iconBack.classList.add('icon-back', 'fa-solid', 'fa-arrow-left');
-        iconBack.addEventListener('click', modalGallery);
-        modalContent.prepend(iconBack);
+    iconBack.classList.add('icon-back', 'fa-solid', 'fa-arrow-left');
+    iconBack.addEventListener('click', modalGallery);
+    modalContent.prepend(iconBack);
 }
 
 // Ouvre la modale
@@ -169,34 +176,42 @@ function openModal(modal) {
     modal.style.display = "flex";
 }
 
-
 // Fermer modale
-function closeModal() {
-    const modal = document.querySelector('.modal');
-    modal && (modal.style.display = 'none', modal.innerHTML = '');
+function closeModal(modalSelector = '.modal') {
+    const modal = document.querySelector(modalSelector);
+    if (modal) {
+        modal.style.display = 'none';
+        modal.innerHTML = '';
+    }
 }
 
 // Fermer modale en cliquant sur window
-function closeClickWindow(modal) {
+function closeClickWindow(modalSelector) {
+    const modal = document.querySelector(modalSelector);
     window.addEventListener('click', function(event) {
-        event.target === modal && closeModal();
+        if (event.target === modal) {
+            closeModal(modalSelector);
+        }
     });
 }
 
 // Création structure de base modale 
-function createModal(data) {
-    let modal = document.querySelector('.modal');
+function createModal(data, className, modalSelector = '.modal') {
+    let modal = document.querySelector(modalSelector);
     
     modal.innerHTML = '';
 
     let modalContent = document.createElement('div');
-        modalContent.classList.add('modal-content');
-        modal.append(modalContent);
+    modalContent.classList.add('modal-content');
+    if (className) {
+        modalContent.classList.add(className);
+    }
+    modal.append(modalContent);
 
     let iconClose = document.createElement('i');
-        iconClose.classList.add('icon-close', 'fa-solid', 'fa-xmark');
-        iconClose.addEventListener('click', closeModal);
-        modalContent.append(iconClose);
+    iconClose.classList.add('icon-close', 'fa-solid', 'fa-xmark');
+    iconClose.addEventListener('click', () => closeModal(modalSelector));
+    modalContent.append(iconClose);
 
     if (data.header) {
         let header = document.createElement('div');
@@ -220,6 +235,6 @@ function createModal(data) {
     }
 
     openModal(modal);
-    closeClickWindow(modal);
+    closeClickWindow(modalSelector); 
 }
 

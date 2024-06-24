@@ -11,25 +11,6 @@ let categories = [];
 
 
 /**
- * Fetches data from the provided URL and returns it
- * @param {string} url - The URL to fetch data from
- * @returns {Promise<Array>} - A promise that resolves to the fetched data array
- */
-async function httpGet(url) 
-{
-    try {
-        const response = await fetch(url);
-        const data     = await response.json();
-        return data;
-    } 
-    catch (error) 
-    {
-        console.error(error);
-        return [];
-    }
-}
-
-/**
  * Resets the gallery by clearing its inner HTML
  */
 function resetGallery()
@@ -55,6 +36,7 @@ function createWorks(works)
 function createWork(work)
 {
     let figure = document.createElement("figure");
+    figure.setAttribute('data-work-id', work.id); 
 
     let img = document.createElement("img");
     img.src = work.imageUrl;
