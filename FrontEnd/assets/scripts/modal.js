@@ -1,6 +1,7 @@
 'use strict';
 
 const works_url = 'http://localhost:5678/api/works';
+const categories_url = "http://localhost:5678/api/categories";
 
 const token = sessionStorage.getItem('token');
 
@@ -154,21 +155,140 @@ function closeSuccessModal() {
     closeModal('.success-modal');
 }
 
-// Création Modal Add Photo
+// Utilisation des fonctions dans modalAddPhoto
 function modalAddPhoto() {
     let header = document.createElement('div');
     header.textContent = "Ajout photo";
     header.classList.add('modal-title-header');
 
-    let body = document.createElement('div');
-    body.textContent = "formulaire";
+    let body = document.createElement('form');
+    body.classList.add("form-add-work");
+
+    const formContent = document.createElement("div");
+    formContent.classList.add("form-content");
+
+    formContent.appendChild(createFormPhotoSection());
+    formContent.appendChild(createFormTitleSection());
+    formContent.appendChild(createFormCategorySection());
+
+    body.appendChild(formContent);
+
+    const submitButton = createFormSubmitButton();
 
     createModal({
         header: header,
         body: body,
-    }, '.gallery-modal');
+        footer: submitButton
+    });
 
     iconBack();
+    loadCategories();
+    
+}
+
+
+// Modale 2 Structure : Crée la section pour ajouter une photo dans le formulaire
+function createFormPhotoSection() {
+    const photoDiv = document.createElement("div");
+    photoDiv.classList.add("form-add-photo");
+
+    const icon = document.createElement("i");
+    icon.classList.add("fa-regular", "fa-image");
+
+    const label = document.createElement("label");
+    label.classList.add("form-button-add-photo");
+    label.setAttribute("for", "input-file");
+    label.textContent = "+ Ajouter photo";
+
+    const inputFile = document.createElement("input");
+    inputFile.type = "file";
+    inputFile.id = "input-file";
+    inputFile.classList.add("form-work-photo");
+    inputFile.accept = "image/jpeg, image/png";
+
+    const fileInfo = document.createElement("p");
+    fileInfo.classList.add("p-photo");
+    fileInfo.textContent = "jpg, png : 4mo max";
+
+    const imgPreview = document.createElement("img");
+    imgPreview.id = "img-preview";
+    imgPreview.style.display = "none";
+    imgPreview.style.maxWidth = "100%";
+    imgPreview.style.maxHeight = "169px";
+
+   
+    const errorContainer = document.createElement("p");
+    errorContainer.classList.add("error-message");
+
+    label.appendChild(inputFile);
+    photoDiv.appendChild(icon);
+    photoDiv.appendChild(label);
+    photoDiv.appendChild(fileInfo);
+    photoDiv.appendChild(imgPreview);
+    photoDiv.appendChild(errorContainer);
+
+    return photoDiv;
+}
+
+// Modale 2 Structure : Crée la section pour ajouter un titre dans le formulaire
+function createFormTitleSection() {
+    const titleDiv = document.createElement("div");
+    titleDiv.classList.add("form-title");
+
+    const label = document.createElement("label");
+    label.setAttribute("for", "input-title");
+    label.textContent = "Titre";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "titre";
+    input.id = "input-title";
+    input.classList.add("form-title-work");
+
+    const errorContainer = document.createElement("p");
+    errorContainer.classList.add("error-message");
+
+    titleDiv.appendChild(label);
+    titleDiv.appendChild(input);
+    titleDiv.appendChild(errorContainer);
+
+    return titleDiv;
+}
+
+// Modale 2 Structure : Crée la section pour sélectionner une catégorie dans le formulaire
+function createFormCategorySection() {
+    const categoryDiv = document.createElement("div");
+    categoryDiv.classList.add("form-categories");
+
+    const label = document.createElement("label");
+    label.setAttribute("for", "categories");
+    label.textContent = "Catégorie";
+
+    const select = document.createElement("select");
+    select.id = "categories";
+
+    const icon = document.createElement("i");
+    icon.classList.add("fa-solid", "fa-chevron-down", "select-icon");
+
+    const errorContainer = document.createElement("p");
+    errorContainer.classList.add("error-message");
+   
+    categoryDiv.appendChild(label);
+    categoryDiv.appendChild(select);
+    categoryDiv.appendChild(icon);
+    categoryDiv.appendChild(errorContainer);
+
+    return categoryDiv;
+}
+
+// Modale 2 Structure : Crée le bouton de soumission du formulaire
+function createFormSubmitButton() {
+    const submitButton = document.createElement("input");
+    submitButton.type = "button";
+    submitButton.value = "Valider";
+    submitButton.id = "form-button-submit";
+
+    return submitButton;
 }
 
 // Création iconBack modal addPhoto
@@ -178,6 +298,18 @@ function iconBack() {
     iconBack.classList.add('icon-back', 'fa-solid', 'fa-arrow-left');
     iconBack.addEventListener('click', modalGallery);
     modalContent.prepend(iconBack);
+}
+
+// Modale 2 : Charge les catégories
+async function loadCategories() {
+    const categories = await httpGet(categories_url);
+    const categorySelect = document.getElementById("categories");
+
+    categorySelect.appendChild(new Option("", ""));
+
+    categories.forEach(({ id, name }) => 
+        categorySelect.appendChild(new Option(name, id))
+    );
 }
 
 // Ouvre la modale
