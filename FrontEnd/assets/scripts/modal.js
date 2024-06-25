@@ -98,17 +98,8 @@ function showConfirmationModal(article) {
     let confirmButton = document.createElement('button');
     confirmButton.textContent = "Confirmer";
     confirmButton.classList.add('modal-btn', 'confirm-btn');
-    confirmButton.addEventListener('click', async () => {
-        closeModal('.confirmation-modal');
-        const workId = article.getAttribute('data-work-id');
-        const success = await deleteWork(workId);
-        if (success) {
-            works = await fetchWorks();
-            createAndDisplayWorks(works); 
-            createWorks(works); 
-        }
-    });
-
+    confirmButton.addEventListener('click', () => handleConfirmClick(article));
+ 
     footer.append(cancelButton, confirmButton);
 
     createModal({
@@ -118,20 +109,12 @@ function showConfirmationModal(article) {
     }, 'small-modal', '.confirmation-modal'); 
 }
 
-// Ajouter cette fonction dans modal.js
-async function deleteWork(workId) {
-    const response = await fetch(`${works_url}/${workId}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
-    if (response.ok) {
-        return true;
-    } else {
-        console.error("Erreur lors de la suppression du projet");
-        return false;
-    }
+// Suppression projet et mise à jour des projets
+async function handleConfirmClick(article) {
+    closeModal('.confirmation-modal');
+    const workId = article.getAttribute('data-work-id');
+    const success = await httpDelete(`${works_url}/${workId}`);
+    success && (works = await fetchWorks(), createAndDisplayWorks(works), createWorks(works), showSuccessModal());
 }
 
 // Récupérer les travaux depuis l'API
@@ -143,6 +126,32 @@ async function fetchWorks() {
 function resetWorksModalGallery() {
     const galleryBody = document.querySelector('.gallery-body');
     galleryBody.innerHTML = ''; 
+}
+
+// Création modal succes projet supprimé
+function showSuccessModal() {
+    let successModal = document.querySelector('.success-modal');
+    if (!successModal) {
+        successModal = document.createElement('div');
+        successModal.classList.add('modal', 'success-modal');
+        document.body.appendChild(successModal);
+    }
+    
+    createModal({
+        header: "",
+        body: "Projet supprimé avec succès",
+        footer: ""
+    }, 'small-modal', '.success-modal');
+
+    const iconClose = document.querySelector('.success-modal .icon-close');
+    iconClose.addEventListener('click', () => closeSuccessModal(successModal));
+    
+    openModal(successModal);
+}
+
+// Fermer modal succes projet supprimé
+function closeSuccessModal() {
+    closeModal('.success-modal');
 }
 
 // Création Modal Add Photo
@@ -179,20 +188,13 @@ function openModal(modal) {
 // Fermer modale
 function closeModal(modalSelector = '.modal') {
     const modal = document.querySelector(modalSelector);
-    if (modal) {
-        modal.style.display = 'none';
-        modal.innerHTML = '';
-    }
+    modal && (modal.style.display = 'none', modal.innerHTML = '');
 }
 
 // Fermer modale en cliquant sur window
 function closeClickWindow(modalSelector) {
     const modal = document.querySelector(modalSelector);
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            closeModal(modalSelector);
-        }
-    });
+    modal && window.addEventListener('click', (event) => event.target === modal && closeModal(modalSelector));
 }
 
 // Création structure de base modale 
@@ -237,4 +239,3 @@ function createModal(data, className, modalSelector = '.modal') {
     openModal(modal);
     closeClickWindow(modalSelector); 
 }
-
