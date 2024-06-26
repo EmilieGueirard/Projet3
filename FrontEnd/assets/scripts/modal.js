@@ -135,7 +135,7 @@ async function handleConfirmClick(article) {
     closeModal('.confirmation-modal');
     const workId = article.getAttribute('data-work-id');
     const success = await httpDelete(`${works_url}/${workId}`);
-    success && (works = await fetchWorks(), createAndDisplayWorks(works), createWorks(works), showSuccessModal());
+    success && (works = await fetchWorks(), createAndDisplayWorks(works), createWorks(works), showSuccessModalDelete());
 }
 
 /*********************************************************************************/
@@ -143,7 +143,7 @@ async function handleConfirmClick(article) {
 /*********************************************************************************/
 
 // Création modal succes projet supprimé
-function showSuccessModal() {
+function showSuccessModalDelete() {
     let successModal = document.querySelector('.success-modal');
     if (!successModal) {
         successModal = document.createElement('div');
@@ -158,13 +158,13 @@ function showSuccessModal() {
     }, 'small-modal', '.success-modal');
 
     const iconClose = document.querySelector('.success-modal .icon-close');
-    iconClose.addEventListener('click', () => closeSuccessModal(successModal));
+    iconClose.addEventListener('click', () => closeSuccessModalDelete(successModal));
     
     openModal(successModal);
 }
 
 // Fermer modal succes projet supprimé
-function closeSuccessModal() {
+function closeSuccessModalDelete() {
     closeModal('.success-modal');
 }
 
@@ -204,7 +204,7 @@ function modalAddPhoto() {
     loadCategories();
 }
 
-// Modale 2 Structure : Crée la section pour ajouter une photo dans le formulaire
+// Crée la section pour ajouter une photo dans le formulaire
 function createFormPhotoSection() {
     const photoDiv = document.createElement("div");
     photoDiv.classList.add("form-add-photo");
@@ -233,11 +233,14 @@ function createFormPhotoSection() {
     imgPreview.style.maxWidth = "100%";
     imgPreview.style.maxHeight = "169px";
 
+    const fileErrorContainer = document.createElement("p");
+    fileErrorContainer.classList.add("file-error-message");
+
     const errorContainer = document.createElement("p");
     errorContainer.classList.add("error-message");
 
     inputFile.addEventListener('change', (event) => {
-        handleFileChange(event, imgPreview, icon, label, fileInfo, errorContainer);
+        handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorContainer);
         checkFormValidity();
     });
 
@@ -246,12 +249,13 @@ function createFormPhotoSection() {
     photoDiv.appendChild(label);
     photoDiv.appendChild(fileInfo);
     photoDiv.appendChild(imgPreview);
+    photoDiv.appendChild(fileErrorContainer);
     photoDiv.appendChild(errorContainer);
 
     return photoDiv;
 }
 
-// Modale 2 Structure : Crée la section pour ajouter un titre dans le formulaire
+// Crée la section pour ajouter un titre dans le formulaire
 function createFormTitleSection() {
     const titleDiv = document.createElement("div");
     titleDiv.classList.add("form-title");
@@ -278,7 +282,7 @@ function createFormTitleSection() {
     return titleDiv;
 }
 
-// Modale 2 Structure : Crée la section pour sélectionner une catégorie dans le formulaire
+// Crée la section pour sélectionner une catégorie dans le formulaire
 function createFormCategorySection() {
     const categoryDiv = document.createElement("div");
     categoryDiv.classList.add("form-categories");
@@ -305,7 +309,7 @@ function createFormCategorySection() {
     return categoryDiv;
 }
 
-// Modale 2 Structure : Crée le bouton de soumission du formulaire
+// Crée le bouton de soumission du formulaire
 function createFormSubmitButton() {
     const submitButton = document.createElement("input");
     submitButton.type = "button";
@@ -340,51 +344,54 @@ async function loadCategories() {
 }
 
 // Afficher l'image sélectionnée
-function handleFileChange(event, imgPreview, icon, label, fileInfo, errorContainer) {
+function handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorContainer) {
     const file = event.target.files[0];
     
-    errorContainer.textContent = "";
+    fileErrorContainer.textContent = "";
 
-    if (!checkFileSize(file, errorContainer)) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => displayImagePreview(event, imgPreview, icon, label, fileInfo, errorContainer);
-    reader.readAsDataURL(file);
+    const isValidFile = checkFileSize(file, fileErrorContainer);
+    if (isValidFile) {
+        const reader = new FileReader();
+        reader.onload = (event) => displayImagePreview(event, imgPreview, icon, label, fileInfo, fileErrorContainer);
+        reader.readAsDataURL(file);
+    }
+    
+    checkFormValidity(!isValidFile);
 }
 
 // Vérifier la taille du fichier
-function checkFileSize(file, errorContainer) {
+function checkFileSize(file, fileErrorContainer) {
     const maxSize = 4 * 1024 * 1024;
-    file.size > maxSize && (errorContainer.textContent = "La taille du fichier ne doit pas dépasser 4 Mo.");
+    file.size > maxSize && (fileErrorContainer.textContent = "La taille du fichier ne doit pas dépasser 4 Mo.");
     return file.size <= maxSize;
 }
 
 // Afficher la prévisualisation de l'image
-function displayImagePreview(event, imgPreview, icon, label, fileInfo, errorContainer) {
+function displayImagePreview(event, imgPreview, icon, label, fileInfo, fileErrorContainer) {
     imgPreview.src = event.target.result;
     imgPreview.style.display = "block";
     icon.style.display = "none";
     label.style.display = "none";
     fileInfo.style.display = "none";
-    addTrashIconImg(imgPreview, icon, label, fileInfo, errorContainer);
+    addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer);
 }
 
 // Ajouter l'icône poubelle à côté de l'image
-function addTrashIconImg(imgPreview, icon, label, fileInfo, errorContainer) {
+function addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer) {
     const trashIcon = document.createElement('i');
     trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon', 'trash-icon-preview');
-    trashIcon.addEventListener('click', () => removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, errorContainer));
+    trashIcon.addEventListener('click', () => removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileErrorContainer));
     imgPreview.parentElement.appendChild(trashIcon);
 }
 
 // Réinitialiser la prévisualisation de l'image
-function removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, errorContainer) {
+function removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileErrorContainer) {
     imgPreview.style.display = "none";
     imgPreview.src = "";
     icon.style.display = "block";
     label.style.display = "block";
     fileInfo.style.display = "block";
-    errorContainer.textContent = "";
+    fileErrorContainer.textContent = "";
     trashIcon.remove();
     document.getElementById('input-file').value = ""; 
     checkFormValidity(); 
@@ -408,8 +415,8 @@ async function handleSubmit() {
         works.push(newWork);
         refreshGalleries();
         resetForm();
+        showSuccessModalAdd();
     } 
-   
 }
 
 // Réinitialiser le formulaire après l'ajout du projet
@@ -434,16 +441,99 @@ async function refreshGalleries() {
 
 // Vérifier la validité du formulaire
 function checkFormValidity() {
-    const title = document.getElementById('input-title').value.trim();
-    const category = document.getElementById('categories').value;
-    const file = document.getElementById('input-file').files[0];
+    const photoInput = document.getElementById('input-file');
+    const titleInput = document.getElementById('input-title');
+    const selectCategories = document.getElementById('categories');
+    const fileErrorContainer = document.querySelector(".file-error-message");
+
+    let isValid = true;
+
+    if (!validatePhotoInput(photoInput) || fileErrorContainer.textContent !== "") isValid = false;
+    if (!validateTitleInput(titleInput)) isValid = false;
+    if (!validateSelectCategories(selectCategories)) isValid = false;
 
     const submitButton = document.getElementById('form-button-submit');
-    const isValid = title && category && !!file;
-
     submitButton.disabled = !isValid;
     submitButton.classList.toggle('active', isValid);
 }
+
+// Valider entrée Fichier
+function validatePhotoInput(input) {
+    if (input.files.length === 0) {
+        showFieldError(input, "Veuillez sélectionner un fichier");
+        return false;
+    } else {
+        hideFieldError(input);
+        return true;
+    }
+}
+
+// Valider entrée Titre
+function validateTitleInput(input) {
+    if (input.value.trim() === "") {
+        showFieldError(input, "Veuillez entrer un titre");
+        return false;
+    } else {
+        hideFieldError(input);
+        return true;
+    }
+}
+
+// Valider entrée Catégories
+function validateSelectCategories(select) {
+    if (select.value === "") {
+        showFieldError(select, "Veuillez sélectionner une catégorie");
+        return false;
+    } else {
+        hideFieldError(select);
+        return true;
+    }
+}
+
+// Modale 2 : Afficher le message d'erreur pour un champ spécifique
+function showFieldError(field, message) {
+    const parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
+    const errorContainer = parentDiv.querySelector(".error-message");
+    errorContainer.textContent = message;
+}
+
+// Modale 2 : Masquer les messages d'erreur spécifiques à chaque champ
+function hideFieldError(field) {
+    const parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
+    const errorContainer = parentDiv.querySelector(".error-message");
+    errorContainer.textContent = "";
+}
+
+/*********************************************************************************/
+//****************             MODAL : SUCCES DELETE            ******************/
+/*********************************************************************************/
+
+// Création modal succes projet supprimé
+function showSuccessModalAdd() {
+    let successModal = document.querySelector('.success-modal');
+    if (!successModal) {
+        successModal = document.createElement('div');
+        successModal.classList.add('modal', 'success-modal');
+        document.body.appendChild(successModal);
+    }
+    
+    createModal({
+        header: "",
+        body: "Projet ajouté avec succès",
+        footer: ""
+    }, 'small-modal', '.success-modal');
+
+    const iconClose = document.querySelector('.success-modal .icon-close');
+    iconClose.addEventListener('click', () => closeSuccessModalAdd(successModal));
+    
+    openModal(successModal);
+}
+
+// Fermer modal succes projet supprimé
+function closeSuccessModalAdd() {
+    closeModal('.success-modal');
+}
+
 
 /*********************************************************************************/
 //****************                 MODAL : GENERAL              ******************/

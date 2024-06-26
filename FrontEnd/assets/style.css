@@ -573,7 +573,6 @@ footer nav ul {
     width: 100%;
     color: #3D3D3D;
     margin-bottom: 47px;
-	border-bottom: 1px solid lightgrey;
 }
 
 .form-categories select {
@@ -621,7 +620,7 @@ footer nav ul {
 }
 
 .form-add-photo .error-message {
-    margin-top: 25px;
+    margin-top: 0px;
 }
 
 /******************* Modal Confirmation Suppresion Projet *******************/
