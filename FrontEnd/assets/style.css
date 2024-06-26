@@ -478,8 +478,13 @@ footer nav ul {
     transition: background-color 0.6s, transform 0.6s;
 }
 
-#form-button-submit:not([disabled]) {
+#form-button-submit.active {
+    background-color:#1D6154;
     cursor: pointer;
+}
+
+#form-button-submit.active:hover {
+    background-color:#0E2F28;
 }
 
 .form-add-photo {
@@ -533,15 +538,9 @@ footer nav ul {
 }
 
 .trash-icon-preview {
-    position: absolute;
-    top: 150px;
-    right: 115px;
-    font-size: 11px;
-    border-radius: 3px;
-    padding: 4px;
-    background-color: black;
-    color: white;
-    cursor: pointer;
+    top: 165px;
+    right: 120px;
+    font-size: 15px;
 }
 
 .form-title {
@@ -557,10 +556,16 @@ footer nav ul {
     height: 51px;
     padding: 16px;
     margin-top: 10px;
-    border: none;
+    border: 2px solid #FFF;
     color: #444;
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
     box-sizing: border-box;
+}
+
+#input-title:focus {
+    border-color: #1D6154;
+    border-radius: 5px;
+    outline: none;
 }
 
 .form-categories {
@@ -591,10 +596,17 @@ footer nav ul {
     height: 51px;
     margin-top: 10px;
     padding: 16px 60px 16px 16px;
-    border: none;
+    border: 2px solid #fff;
     color: #444;
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
     box-sizing: border-box;
+}
+
+#categories:focus {
+    background-color: white; 
+    border: 2px solid #1D6154; 
+    border-radius: 5px;
+    outline: none; 
 }
 
 .file-error-message {

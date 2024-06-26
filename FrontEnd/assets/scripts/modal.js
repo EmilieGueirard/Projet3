@@ -5,6 +5,7 @@ const categories_url = "http://localhost:5678/api/categories";
 
 const token = sessionStorage.getItem('token');
 
+
 // Créer les conteneurs de modales
 const galleryModal = document.createElement('div');
 galleryModal.classList.add('modal', 'gallery-modal');
@@ -32,6 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+/*********************************************************************************/
+//****************             MODAL : GALLERY PHOTO            ******************/
+/*********************************************************************************/
 
 // Création modal Gallery Photo
 function modalGallery() {
@@ -70,6 +75,11 @@ function createAndDisplayWorks(works) {
     });
 }
 
+// Récupérer les travaux depuis l'API
+async function fetchWorks() {
+    return await httpGet(works_url);
+}
+
 // Ajouter icône poubelle à un article
 function addTrashIcon(article) {
     const trashIcon = document.createElement('i');
@@ -85,6 +95,16 @@ function trashIconClick(trashIcon, article) {
         showConfirmationModal(article);
     });
 }
+
+// Réinitialiser le contenu de gallery-body
+function resetWorksModalGallery() {
+    const galleryBody = document.querySelector('.gallery-body');
+    galleryBody.innerHTML = ''; 
+}
+
+/*********************************************************************************/
+//****************             MODAL : CONFIRM DELETE           ******************/
+/*********************************************************************************/
 
 // Fonction pour créer et afficher la modale de confirmation
 function showConfirmationModal(article) {
@@ -118,16 +138,9 @@ async function handleConfirmClick(article) {
     success && (works = await fetchWorks(), createAndDisplayWorks(works), createWorks(works), showSuccessModal());
 }
 
-// Récupérer les travaux depuis l'API
-async function fetchWorks() {
-    return await httpGet(works_url);
-}
-
-// Réinitialiser le contenu de gallery-body
-function resetWorksModalGallery() {
-    const galleryBody = document.querySelector('.gallery-body');
-    galleryBody.innerHTML = ''; 
-}
+/*********************************************************************************/
+//****************             MODAL : SUCCES DELETE            ******************/
+/*********************************************************************************/
 
 // Création modal succes projet supprimé
 function showSuccessModal() {
@@ -155,6 +168,10 @@ function closeSuccessModal() {
     closeModal('.success-modal');
 }
 
+/*********************************************************************************/
+//****************                MODAL : ADD PHOTO             ******************/
+/*********************************************************************************/
+
 // Utilisation des fonctions dans modalAddPhoto
 function modalAddPhoto() {
     let header = document.createElement('div');
@@ -174,6 +191,8 @@ function modalAddPhoto() {
     body.appendChild(formContent);
 
     const submitButton = createFormSubmitButton();
+    submitButton.addEventListener('click', handleSubmit);
+    
 
     createModal({
         header: header,
@@ -183,9 +202,7 @@ function modalAddPhoto() {
 
     iconBack();
     loadCategories();
-    
 }
-
 
 // Modale 2 Structure : Crée la section pour ajouter une photo dans le formulaire
 function createFormPhotoSection() {
@@ -216,9 +233,13 @@ function createFormPhotoSection() {
     imgPreview.style.maxWidth = "100%";
     imgPreview.style.maxHeight = "169px";
 
-   
     const errorContainer = document.createElement("p");
     errorContainer.classList.add("error-message");
+
+    inputFile.addEventListener('change', (event) => {
+        handleFileChange(event, imgPreview, icon, label, fileInfo, errorContainer);
+        checkFormValidity();
+    });
 
     label.appendChild(inputFile);
     photoDiv.appendChild(icon);
@@ -244,6 +265,8 @@ function createFormTitleSection() {
     input.name = "titre";
     input.id = "input-title";
     input.classList.add("form-title-work");
+    input.setAttribute("autocomplete", "off");
+    input.addEventListener('input', checkFormValidity);
 
     const errorContainer = document.createElement("p");
     errorContainer.classList.add("error-message");
@@ -266,7 +289,8 @@ function createFormCategorySection() {
 
     const select = document.createElement("select");
     select.id = "categories";
-
+    select.addEventListener('change', checkFormValidity);
+    
     const icon = document.createElement("i");
     icon.classList.add("fa-solid", "fa-chevron-down", "select-icon");
 
@@ -287,6 +311,9 @@ function createFormSubmitButton() {
     submitButton.type = "button";
     submitButton.value = "Valider";
     submitButton.id = "form-button-submit";
+    submitButton.disabled = true;
+    submitButton.classList.add('submit-button');
+    submitButton.addEventListener('click', handleSubmit);
 
     return submitButton;
 }
@@ -311,6 +338,128 @@ async function loadCategories() {
         categorySelect.appendChild(new Option(name, id))
     );
 }
+
+// Afficher l'image sélectionnée
+function handleFileChange(event, imgPreview, icon, label, fileInfo, errorContainer) {
+    const file = event.target.files[0];
+    
+    errorContainer.textContent = "";
+
+    if (!checkFileSize(file, errorContainer)) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => displayImagePreview(event, imgPreview, icon, label, fileInfo, errorContainer);
+    reader.readAsDataURL(file);
+}
+
+// Vérifier la taille du fichier
+function checkFileSize(file, errorContainer) {
+    const maxSize = 4 * 1024 * 1024;
+    file.size > maxSize && (errorContainer.textContent = "La taille du fichier ne doit pas dépasser 4 Mo.");
+    return file.size <= maxSize;
+}
+
+// Afficher la prévisualisation de l'image
+function displayImagePreview(event, imgPreview, icon, label, fileInfo, errorContainer) {
+    imgPreview.src = event.target.result;
+    imgPreview.style.display = "block";
+    icon.style.display = "none";
+    label.style.display = "none";
+    fileInfo.style.display = "none";
+    addTrashIconImg(imgPreview, icon, label, fileInfo, errorContainer);
+}
+
+// Ajouter l'icône poubelle à côté de l'image
+function addTrashIconImg(imgPreview, icon, label, fileInfo, errorContainer) {
+    const trashIcon = document.createElement('i');
+    trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon', 'trash-icon-preview');
+    trashIcon.addEventListener('click', () => removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, errorContainer));
+    imgPreview.parentElement.appendChild(trashIcon);
+}
+
+// Réinitialiser la prévisualisation de l'image
+function removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, errorContainer) {
+    imgPreview.style.display = "none";
+    imgPreview.src = "";
+    icon.style.display = "block";
+    label.style.display = "block";
+    fileInfo.style.display = "block";
+    errorContainer.textContent = "";
+    trashIcon.remove();
+    document.getElementById('input-file').value = ""; 
+    checkFormValidity(); 
+}
+
+// Gérer la soumission du formulaire
+async function handleSubmit() {
+    const title = document.getElementById('input-title').value.trim();
+    const category = document.getElementById('categories').value;
+    const fileInput = document.getElementById('input-file');
+    const file = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('category', category);
+    formData.append('image', file);
+
+    try {
+        const response = await fetch(works_url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (response.ok) {
+            const newWork = await response.json();
+            works.push(newWork);
+            refreshGalleries();
+            resetForm();
+        } else {
+            console.error("Erreur lors de l'ajout du projet.");
+        }
+    } catch (error) {
+        console.error("Erreur lors de l'ajout du projet :", error);
+    }
+}
+
+// Réinitialiser le formulaire après l'ajout du projet
+function resetForm() {
+    const formContent = document.querySelector('.form-content');
+    formContent.innerHTML = "";
+
+    formContent.appendChild(createFormPhotoSection());
+    formContent.appendChild(createFormTitleSection());
+    formContent.appendChild(createFormCategorySection());
+
+    document.getElementById('form-button-submit').disabled = true;
+    document.getElementById('form-button-submit').classList.remove('active');
+    loadCategories();
+}
+
+// Rafraîchir les galeries après l'ajout d'un projet
+async function refreshGalleries() {
+    works = await fetchWorks();
+    createWorks(works);
+}
+
+// Vérifier la validité du formulaire
+function checkFormValidity() {
+    const title = document.getElementById('input-title').value.trim();
+    const category = document.getElementById('categories').value;
+    const file = document.getElementById('input-file').files[0];
+
+    const submitButton = document.getElementById('form-button-submit');
+    const isValid = title && category && !!file;
+
+    submitButton.disabled = !isValid;
+    submitButton.classList.toggle('active', isValid);
+}
+
+/*********************************************************************************/
+//****************                 MODAL : GENERAL              ******************/
+/*********************************************************************************/
 
 // Ouvre la modale
 function openModal(modal) {
