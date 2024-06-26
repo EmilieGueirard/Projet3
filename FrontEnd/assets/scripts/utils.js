@@ -59,9 +59,31 @@ async function httpDelete(url, headers={})
     }
 }
 
+async function httpPostFormData(url, formData, headers={})
+{
+    headers = Object.assign(headers, {
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+    });
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: headers
+        });
+        return await response.json();
+    }
+    catch (error) 
+    {
+        console.error(error);
+        return null;
+    }
+}
+
 function redirectTo(url) {
     window.location.href = url;
 }
+
 
 
 

@@ -402,26 +402,14 @@ async function handleSubmit() {
     formData.append('category', category);
     formData.append('image', file);
 
-    try {
-        const response = await fetch(works_url, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-            body: formData
-        });
-
-        if (response.ok) {
-            const newWork = await response.json();
-            works.push(newWork);
-            refreshGalleries();
-            resetForm();
-        } else {
-            console.error("Erreur lors de l'ajout du projet.");
-        }
-    } catch (error) {
-        console.error("Erreur lors de l'ajout du projet :", error);
-    }
+    const newWork = await httpPostFormData(works_url, formData);
+        
+    if (newWork) {
+        works.push(newWork);
+        refreshGalleries();
+        resetForm();
+    } 
+   
 }
 
 // Réinitialiser le formulaire après l'ajout du projet
