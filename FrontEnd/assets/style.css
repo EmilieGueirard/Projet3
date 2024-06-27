@@ -296,8 +296,22 @@ footer nav ul {
 	margin-bottom: 30px; 
 	padding: 10px;
 	height: 51px;
-	border: none;
+	border: 2px solid #fff;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+#email:focus {
+    background-color: white; 
+    border: 2px solid #1D6154; 
+    border-radius: 5px;
+    outline: none; 
+}
+
+#password:focus {
+    background-color: white; 
+    border: 2px solid #1D6154; 
+    border-radius: 5px;
+    outline: none; 
 }
 
 .form input[type="submit"] {
@@ -309,14 +323,6 @@ footer nav ul {
 	border-radius: 60px; 
 	padding: 10px; 
 	cursor: pointer;
-}
-
-.forgotten_Password {
-	cursor: pointer; 
-}
-  
-.forgotten_Password:hover {
-	text-decoration: underline; 
 }
 
 .error-message {
@@ -685,7 +691,7 @@ footer nav ul {
 	background: #0E2F28;
 }
 
-/******************* Modal Succes Delete Project *******************/
+/******************* Modal Succes Project *******************/
 
 .success-modal .modal-content {
     width: 300px;
