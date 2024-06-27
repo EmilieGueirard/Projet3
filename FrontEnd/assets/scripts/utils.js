@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * Fetches data from the provided URL and returns it
+ * Fetch data from the given URL
  * @param {string} url - The URL to fetch data from
- * @returns {Promise<Array>} - A promise that resolves to the fetched data array
+ * @returns {Promise<Object>} - The fetched data
  */
 async function httpGet(url) 
 {
@@ -18,6 +18,13 @@ async function httpGet(url)
     }
 }
 
+/**
+ * Send a POST request with JSON data
+ * @param {string} url - The URL to send the request to
+ * @param {Object} data - The data to send
+ * @param {Object} [headers={}] - Optional headers
+ * @returns {Promise<Array>} - The response data
+ */
 async function httpPost(url, data, headers={})
 {
     headers = Object.assign(headers, { 
@@ -39,6 +46,12 @@ async function httpPost(url, data, headers={})
     }
 }
 
+/**
+ * Send a DELETE request
+ * @param {string} url - The URL to send the request to
+ * @param {Object} [headers={}] - Optional headers
+ * @returns {Promise<boolean>} - Success status
+ */
 async function httpDelete(url, headers={})
 {
     headers = Object.assign(headers, { 
@@ -59,6 +72,13 @@ async function httpDelete(url, headers={})
     }
 }
 
+/**
+ * Send a POST request with FormData
+ * @param {string} url - The URL to send the request to
+ * @param {FormData} formData - The FormData object to send
+ * @param {Object} [headers={}] - Optional headers
+ * @returns {Promise<Object|null>} - The response data
+ */
 async function httpPostFormData(url, formData, headers={})
 {
     headers = Object.assign(headers, {
@@ -80,12 +100,11 @@ async function httpPostFormData(url, formData, headers={})
     }
 }
 
-function redirectTo(url) {
+/**
+ * Redirect to the specified URL
+ * @param {string} url - The URL to redirect to
+ */
+function redirectTo(url) 
+{
     window.location.href = url;
 }
-
-
-
-
-
-

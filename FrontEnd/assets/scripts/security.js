@@ -6,12 +6,17 @@ const form = document.querySelector('#loginForm');
 const topBar = document.querySelector('.topBar');
 const loginLogoutLink = document.getElementById("loginLink");
 
-// Ajouter le lien de connexion/déconnexion à la barre de navigation et afficher le mode édition si token présent
+/**
+ * Add login/logout link to the nav bar and show edit mode if token is present
+ */
 document.addEventListener('DOMContentLoaded', function() {
     addAuthLink();
     displayEditionMode();
 });
 
+/**
+ * Handle form submission for login
+ */
 form?.addEventListener('submit', async (event) => {
     event.preventDefault();
     hideError();
@@ -24,57 +29,98 @@ form?.addEventListener('submit', async (event) => {
     processAuthenticationResponse(response);
 });
 
-// Traiter la réponse de l'authentification
-function processAuthenticationResponse(response) {
-    !response?.userId && handleAuthenticationError("Erreur dans l’identifiant ou le mot de passe");
-
-    response?.userId && (response?.token ? handleAuthenticationSuccess(response.token): handleAuthenticationError("Une erreur est survenue"));
+/**
+ * Process authentication response
+ * @param {Object} response - The response from the authentication request
+ */
+function processAuthenticationResponse(response) 
+{
+    if (!response?.userId) {
+        handleAuthenticationError("Erreur dans l’identifiant ou le mot de passe");
+    } else if (response?.token) {
+        handleAuthenticationSuccess(response.token);
+    } else {
+        handleAuthenticationError("Une erreur est survenue");
+    }
 }
 
-// Gérer le succès de l'authentification
-function handleAuthenticationSuccess(token) {
+/**
+ * Handle successful authentication
+ * @param {string} token - The authentication token
+ */
+function handleAuthenticationSuccess(token) 
+{
     saveToken(token);
     redirectTo('./index.html');
 }
 
-// Gérer l'erreur d'authentification
-function handleAuthenticationError(message) {
+/**
+ * Handle authentication error
+ * @param {string} message - The error message to display
+ */
+function handleAuthenticationError(message) 
+{
     showError(message);
 }
 
-// Enregistrer le token
+/**
+ * Save token to session storage
+ * @param {string} token - The authentication token
+ */
 function saveToken(token) {
     store.setItem('token', token);
 }
 
-// Afficher un message d'erreur
-function showError(msg) {
+/**
+ * Show error message
+ * @param {string} message - The error message to display
+ */
+function showError(message) 
+{
     const errNode = document.createElement('div');
     errNode.classList.add('error-message');
-    errNode.textContent = msg;
+    errNode.textContent = message;
     form.prepend(errNode);
 }
 
-// Cacher le message d'erreur
-function hideError() {
+/**
+ * Hide error message
+ */
+function hideError() 
+{
     document.querySelector(".error-message")?.remove();
 }
 
-// Vérifier si l'utilisateur est authentifié
-function isAuthenticated() {
+/**
+ * Check if user is authenticated
+ * @returns {boolean} - True if the user is authenticated, false otherwise
+ */
+function isAuthenticated() 
+{
     return !!store.getItem('token');
 }
 
-// Ajouter le lien de connexion ou de déconnexion
-function addAuthLink() {
+/**
+ * Add login or logout link to the nav bar
+ */
+function addAuthLink() 
+{
     const navList = document.querySelector('nav ul');
     const authLink = createAuthLink();
-    navList && insertAuthLink(navList, authLink);
-    isAuthenticated() && setLogoutLink(authLink);
+    if (navList) {
+        insertAuthLink(navList, authLink);
+        if (isAuthenticated()) {
+            setLogoutLink(authLink);
+        }
+    }
 }
 
-// Créer la structure du lien de connexion
-function createAuthLink() {
+/**
+ * Create login link structure
+ * @returns {HTMLElement} - The created login link element
+ */
+function createAuthLink() 
+{
     const authLink = document.createElement('li');
     const authAnchor = document.createElement('a');
     authAnchor.classList.add('nav-link');
@@ -84,8 +130,12 @@ function createAuthLink() {
     return authLink;
 }
 
-// Remplacer le lien login par logout
-function setLogoutLink(authLink) {
+/**
+ * Replace login link with logout
+ * @param {HTMLElement} authLink - The login link element to replace
+ */
+function setLogoutLink(authLink) 
+{
     const authAnchor = authLink.querySelector('a');
     authAnchor.textContent = "logout";
     authAnchor.href = '#';
@@ -95,31 +145,49 @@ function setLogoutLink(authLink) {
     });
 }
 
-// Insérer le lien d'authentification dans la barre de navigation
-function insertAuthLink(navList, authLink) {
+/**
+ * Insert auth link into the nav bar
+ * @param {HTMLElement} navList - The nav list element
+ * @param {HTMLElement} authLink - The auth link element
+ */
+function insertAuthLink(navList, authLink) 
+{
     navList.insertBefore(authLink, navList.children[navList.children.length - 1]);
 }
 
-// Déconnexion
-function logout() {
+/**
+ * Logout user
+ */
+function logout() 
+{
     store.removeItem('token');
     redirectTo('./index.html');
 }
 
-// Afficher mode édition complet quand token présent
-function displayEditionMode() {
-    isAuthenticated() && (styleModif(), deleteFilters(), addModifyLink());
+/**
+ * Display full edit mode if token is present
+ */
+function displayEditionMode() 
+{
+    if (isAuthenticated()) {
+        styleModif();
+        deleteFilters();
+        addModifyLink();
+    }
 }
 
-// Changement du style de la page 
-function styleModif() {
+/**
+ * Change the page style for edit mode
+ */
+function styleModif() 
+{
     const editionMode = document.createElement('div');
     editionMode.classList.add('editionMode');
 
     const icon = document.createElement('i');
     icon.classList.add('fa-regular', 'fa-pen-to-square');
 
-    const editionText = document.createElement("p");
+    const editionText = document.createElement('p');
     editionText.textContent = "Mode édition";
 
     topBar.style.margin = '38px 0 0 0';
@@ -129,13 +197,19 @@ function styleModif() {
     topBar.appendChild(editionMode);
 }
 
-// Supprimer les filtres
-function deleteFilters() {
+/**
+ * Remove filters
+ */
+function deleteFilters() 
+{
     document.querySelector('.filters')?.remove();
 }
 
-// Créer le lien : icône + Modifier
-function addModifyLink() {
+/**
+ * Create "modify" link with icon
+ */
+function addModifyLink() 
+{
     const projectsSection = document.querySelector('#portfolio .projects');
 
     const modifyLink = document.createElement('a');

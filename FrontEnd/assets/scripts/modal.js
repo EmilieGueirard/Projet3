@@ -6,7 +6,9 @@ const categories_url = "http://localhost:5678/api/categories";
 const token = sessionStorage.getItem('token');
 
 
-// Créer les conteneurs de modales
+/**
+ * Create modal containers
+ */
 const galleryModal = document.createElement('div');
 galleryModal.classList.add('modal', 'gallery-modal');
 document.body.appendChild(galleryModal);
@@ -15,7 +17,9 @@ const confirmationModal = document.createElement('div');
 confirmationModal.classList.add('modal', 'confirmation-modal');
 document.body.appendChild(confirmationModal);
 
-// Ajouter les déclencheurs pour ouvrir les modales
+/**
+ * Add triggers to open modals
+ */
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('[data-modal]')?.forEach(trigger => {
         trigger.addEventListener('click', event => {
@@ -35,10 +39,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /*********************************************************************************/
-//****************             MODAL : GALLERY PHOTO            ******************/
+/*****************             MODAL : PHOTO GALLERY            ******************/
 /*********************************************************************************/
 
-// Création modal Gallery Photo
+/**
+ * Create and display the photo gallery modal
+ */
 function modalGallery() {
     let body = document.createElement('div');
     body.classList.add('gallery-body');
@@ -58,8 +64,12 @@ function modalGallery() {
     createAndDisplayWorks(works);
 }
 
-// Créer et ajouter les travaux à la modale Gallery
-function createAndDisplayWorks(works) {
+/**
+ * Create and add works to the gallery modal
+ * @param {Array} works - List of works to display
+ */
+function createAndDisplayWorks(works) 
+{
     resetWorksModalGallery();
     const galleryBody = document.querySelector('.gallery-body');
     works.forEach(work => {
@@ -75,13 +85,21 @@ function createAndDisplayWorks(works) {
     });
 }
 
-// Récupérer les travaux depuis l'API
-async function fetchWorks() {
+/**
+ * Fetch works from the API
+ * @returns {Promise<Array>} - List of works
+ */
+async function fetchWorks() 
+{
     return await httpGet(works_url);
 }
 
-// Ajouter icône poubelle à un article
-function addTrashIcon(article) {
+/**
+ * Add trash icon to an article
+ * @param {HTMLElement} article - The article element to add the icon to
+ */
+function addTrashIcon(article) 
+{
     const trashIcon = document.createElement('i');
     trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon');
 
@@ -89,25 +107,37 @@ function addTrashIcon(article) {
     trashIconClick(trashIcon, article);
 }
 
-// Evenement au click icone poubelle
-function trashIconClick(trashIcon, article) {
+/**
+ * Add click event to trash icon
+ * @param {HTMLElement} trashIcon - The trash icon element
+ * @param {HTMLElement} article - The article element representing the work
+ */
+function trashIconClick(trashIcon, article) 
+{
     trashIcon.addEventListener('click', () => {
         showConfirmationModal(article);
     });
 }
 
-// Réinitialiser le contenu de gallery-body
-function resetWorksModalGallery() {
+/**
+ * Reset the content of the gallery body
+ */
+function resetWorksModalGallery() 
+{
     const galleryBody = document.querySelector('.gallery-body');
     galleryBody.innerHTML = ''; 
 }
 
 /*********************************************************************************/
-//****************             MODAL : CONFIRM DELETE           ******************/
+/*****************             MODAL : CONFIRM DELETE           ******************/
 /*********************************************************************************/
 
-// Fonction pour créer et afficher la modale de confirmation
-function showConfirmationModal(article) {
+/**
+ * Show confirmation modal for deleting a project
+ * @param {HTMLElement} article - The article element representing the project
+ */
+function showConfirmationModal(article) 
+{
     let footer = document.createElement('div'); 
     footer.classList.add('modal-footer');
 
@@ -130,50 +160,27 @@ function showConfirmationModal(article) {
     }, 'small-modal', '.confirmation-modal'); 
 }
 
-// Suppression projet et mise à jour des projets
-async function handleConfirmClick(article) {
+/**
+ * Handle confirm button click for deleting a project
+ * @param {HTMLElement} article - The article element representing the project
+ */
+async function handleConfirmClick(article) 
+{
     closeModal('.confirmation-modal');
     const workId = article.getAttribute('data-work-id');
     const success = await httpDelete(`${works_url}/${workId}`);
-    success && (works = await fetchWorks(), createAndDisplayWorks(works), createWorks(works), showSuccessModalDelete());
+    success && (works = await fetchWorks(), createAndDisplayWorks(works), createWorks(works), showSuccessModal("Projet supprimé avec succès"));
 }
 
 /*********************************************************************************/
-//****************             MODAL : SUCCES DELETE            ******************/
+/*****************                MODAL : ADD PHOTO             ******************/
 /*********************************************************************************/
 
-// Création modal succes projet supprimé
-function showSuccessModalDelete() {
-    let successModal = document.querySelector('.success-modal');
-    if (!successModal) {
-        successModal = document.createElement('div');
-        successModal.classList.add('modal', 'success-modal');
-        document.body.appendChild(successModal);
-    }
-    
-    createModal({
-        header: "",
-        body: "Projet supprimé avec succès",
-        footer: ""
-    }, 'small-modal', '.success-modal');
-
-    const iconClose = document.querySelector('.success-modal .icon-close');
-    iconClose.addEventListener('click', () => closeSuccessModalDelete(successModal));
-    
-    openModal(successModal);
-}
-
-// Fermer modal succes projet supprimé
-function closeSuccessModalDelete() {
-    closeModal('.success-modal');
-}
-
-/*********************************************************************************/
-//****************                MODAL : ADD PHOTO             ******************/
-/*********************************************************************************/
-
-// Utilisation des fonctions dans modalAddPhoto
-function modalAddPhoto() {
+/**
+ * Show the modal to add a photo
+ */
+function modalAddPhoto() 
+{
     let header = document.createElement('div');
     header.textContent = "Ajout photo";
     header.classList.add('modal-title-header');
@@ -204,8 +211,12 @@ function modalAddPhoto() {
     loadCategories();
 }
 
-// Crée la section pour ajouter une photo dans le formulaire
-function createFormPhotoSection() {
+/**
+ * Create the photo upload section in the form
+ * @returns {HTMLElement} - The photo section element
+ */
+function createFormPhotoSection() 
+{
     const photoDiv = document.createElement("div");
     photoDiv.classList.add("form-add-photo");
 
@@ -255,8 +266,13 @@ function createFormPhotoSection() {
     return photoDiv;
 }
 
-// Crée la section pour ajouter un titre dans le formulaire
-function createFormTitleSection() {
+/**
+ * Create the title input section in the form
+ * @returns {HTMLElement} - The title section element
+ */
+
+function createFormTitleSection() 
+{
     const titleDiv = document.createElement("div");
     titleDiv.classList.add("form-title");
 
@@ -282,8 +298,12 @@ function createFormTitleSection() {
     return titleDiv;
 }
 
-// Crée la section pour sélectionner une catégorie dans le formulaire
-function createFormCategorySection() {
+/**
+ * Create the category selection section in the form
+ * @returns {HTMLElement} - The category section element
+ */
+function createFormCategorySection() 
+{
     const categoryDiv = document.createElement("div");
     categoryDiv.classList.add("form-categories");
 
@@ -309,8 +329,12 @@ function createFormCategorySection() {
     return categoryDiv;
 }
 
-// Crée le bouton de soumission du formulaire
-function createFormSubmitButton() {
+/**
+ * Create the submit button for the form
+ * @returns {HTMLElement} - The submit button element
+ */
+function createFormSubmitButton() 
+{
     const submitButton = document.createElement("input");
     submitButton.type = "button";
     submitButton.value = "Valider";
@@ -322,8 +346,11 @@ function createFormSubmitButton() {
     return submitButton;
 }
 
-// Création iconBack modal addPhoto
-function iconBack() {
+/**
+ * Create back icon in the add photo modal
+ */
+function iconBack() 
+{
     let modalContent = document.querySelector('.modal-content');
     let iconBack = document.createElement('i');
     iconBack.classList.add('icon-back', 'fa-solid', 'fa-arrow-left');
@@ -331,8 +358,11 @@ function iconBack() {
     modalContent.prepend(iconBack);
 }
 
-// Modale 2 : Charge les catégories
-async function loadCategories() {
+/**
+ * Load categories into the category select element
+ */
+async function loadCategories() 
+{
     const categories = await httpGet(categories_url);
     const categorySelect = document.getElementById("categories");
 
@@ -343,8 +373,17 @@ async function loadCategories() {
     );
 }
 
-// Afficher l'image sélectionnée
-function handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorContainer) {
+/**
+ * Handle file input change and display selected image
+ * @param {Event} event - The change event
+ * @param {HTMLElement} imgPreview - The image preview element
+ * @param {HTMLElement} icon - The icon element
+ * @param {HTMLElement} label - The label element
+ * @param {HTMLElement} fileInfo - The file info element
+ * @param {HTMLElement} fileErrorContainer - The file error container element
+ */
+function handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorContainer) 
+{
     const file = event.target.files[0];
     
     fileErrorContainer.textContent = "";
@@ -360,14 +399,24 @@ function handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorCon
 }
 
 // Vérifier la taille du fichier
-function checkFileSize(file, fileErrorContainer) {
+function checkFileSize(file, fileErrorContainer) 
+{
     const maxSize = 4 * 1024 * 1024;
     file.size > maxSize && (fileErrorContainer.textContent = "La taille du fichier ne doit pas dépasser 4 Mo.");
     return file.size <= maxSize;
 }
 
-// Afficher la prévisualisation de l'image
-function displayImagePreview(event, imgPreview, icon, label, fileInfo, fileErrorContainer) {
+/**
+ * Display the image preview
+ * @param {Event} event - The load event
+ * @param {HTMLElement} imgPreview - The image preview element
+ * @param {HTMLElement} icon - The icon element
+ * @param {HTMLElement} label - The label element
+ * @param {HTMLElement} fileInfo - The file info element
+ * @param {HTMLElement} fileErrorContainer - The file error container element
+ */
+function displayImagePreview(event, imgPreview, icon, label, fileInfo, fileErrorContainer) 
+{
     imgPreview.src = event.target.result;
     imgPreview.style.display = "block";
     icon.style.display = "none";
@@ -376,16 +425,33 @@ function displayImagePreview(event, imgPreview, icon, label, fileInfo, fileError
     addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer);
 }
 
-// Ajouter l'icône poubelle à côté de l'image
-function addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer) {
+/**
+ * Add trash icon next to the image
+ * @param {HTMLElement} imgPreview - The image preview element
+ * @param {HTMLElement} icon - The icon element
+ * @param {HTMLElement} label - The label element
+ * @param {HTMLElement} fileInfo - The file info element
+ * @param {HTMLElement} fileErrorContainer - The file error container element
+ */
+function addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer) 
+{
     const trashIcon = document.createElement('i');
     trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon', 'trash-icon-preview');
     trashIcon.addEventListener('click', () => removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileErrorContainer));
     imgPreview.parentElement.appendChild(trashIcon);
 }
 
-// Réinitialiser la prévisualisation de l'image
-function removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileErrorContainer) {
+/**
+ * Remove the image preview
+ * @param {HTMLElement} imgPreview - The image preview element
+ * @param {HTMLElement} icon - The icon element
+ * @param {HTMLElement} label - The label element
+ * @param {HTMLElement} fileInfo - The file info element
+ * @param {HTMLElement} trashIcon - The trash icon element
+ * @param {HTMLElement} fileErrorContainer - The file error container element
+ */
+function removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileErrorContainer) 
+{
     imgPreview.style.display = "none";
     imgPreview.src = "";
     icon.style.display = "block";
@@ -397,8 +463,12 @@ function removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileEr
     checkFormValidity(); 
 }
 
-// Gérer la soumission du formulaire
-async function handleSubmit() {
+/**
+ * Handle form submission
+ */
+
+async function handleSubmit() 
+{
     const title = document.getElementById('input-title').value.trim();
     const category = document.getElementById('categories').value;
     const fileInput = document.getElementById('input-file');
@@ -415,12 +485,15 @@ async function handleSubmit() {
         works.push(newWork);
         refreshGalleries();
         resetForm();
-        showSuccessModalAdd();
+        showSuccessModal("Projet ajouté avec succès");
     } 
 }
 
-// Réinitialiser le formulaire après l'ajout du projet
-function resetForm() {
+/**
+ * Reset the form after adding a project
+ */
+function resetForm() 
+{
     const formContent = document.querySelector('.form-content');
     formContent.innerHTML = "";
 
@@ -433,14 +506,20 @@ function resetForm() {
     loadCategories();
 }
 
-// Rafraîchir les galeries après l'ajout d'un projet
-async function refreshGalleries() {
+/**
+ * Refresh galleries after adding a project
+ */
+async function refreshGalleries() 
+{
     works = await fetchWorks();
     createWorks(works);
 }
 
-// Vérifier la validité du formulaire
-function checkFormValidity() {
+/**
+ * Check the validity of the form
+ */
+function checkFormValidity() 
+{
     const photoInput = document.getElementById('input-file');
     const titleInput = document.getElementById('input-title');
     const selectCategories = document.getElementById('categories');
@@ -457,8 +536,13 @@ function checkFormValidity() {
     submitButton.classList.toggle('active', isValid);
 }
 
-// Valider entrée Fichier
-function validatePhotoInput(input) {
+/**
+ * Validate file input
+ * @param {HTMLElement} input - The file input element
+ * @returns {boolean} - True if valid, false otherwise
+ */
+function validatePhotoInput(input) 
+{
     if (input.files.length === 0) {
         showFieldError(input, "Veuillez sélectionner un fichier");
         return false;
@@ -468,8 +552,13 @@ function validatePhotoInput(input) {
     }
 }
 
-// Valider entrée Titre
-function validateTitleInput(input) {
+/**
+ * Validate title input
+ * @param {HTMLElement} input - The title input element
+ * @returns {boolean} - True if valid, false otherwise
+ */
+function validateTitleInput(input) 
+{
     if (input.value.trim() === "") {
         showFieldError(input, "Veuillez entrer un titre");
         return false;
@@ -479,8 +568,13 @@ function validateTitleInput(input) {
     }
 }
 
-// Valider entrée Catégories
-function validateSelectCategories(select) {
+/**
+ * Validate category selection
+ * @param {HTMLElement} select - The category select element
+ * @returns {boolean} - True if valid, false otherwise
+ */
+function validateSelectCategories(select) 
+{
     if (select.value === "") {
         showFieldError(select, "Veuillez sélectionner une catégorie");
         return false;
@@ -490,26 +584,39 @@ function validateSelectCategories(select) {
     }
 }
 
-// Modale 2 : Afficher le message d'erreur pour un champ spécifique
-function showFieldError(field, message) {
+/**
+ * Show field error message
+ * @param {HTMLElement} field - The field element
+ * @param {string} message - The error message
+ */
+function showFieldError(field, message) 
+{
     const parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
     const errorContainer = parentDiv.querySelector(".error-message");
     errorContainer.textContent = message;
 }
 
-// Modale 2 : Masquer les messages d'erreur spécifiques à chaque champ
-function hideFieldError(field) {
+/**
+ * Hide field error message
+ * @param {HTMLElement} field - The field element
+ */
+function hideFieldError(field) 
+{
     const parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
     const errorContainer = parentDiv.querySelector(".error-message");
     errorContainer.textContent = "";
 }
 
 /*********************************************************************************/
-//****************             MODAL : SUCCES DELETE            ******************/
+/**************                 GENERAL SUCCES MODAL              ****************/
 /*********************************************************************************/
 
-// Création modal succes projet supprimé
-function showSuccessModalAdd() {
+/**
+ * Show success modal with a message
+ * @param {string} message - The success message to display
+ */
+function showSuccessModal(message) 
+{
     let successModal = document.querySelector('.success-modal');
     if (!successModal) {
         successModal = document.createElement('div');
@@ -519,45 +626,65 @@ function showSuccessModalAdd() {
     
     createModal({
         header: "",
-        body: "Projet ajouté avec succès",
+        body: message,
         footer: ""
     }, 'small-modal', '.success-modal');
 
     const iconClose = document.querySelector('.success-modal .icon-close');
-    iconClose.addEventListener('click', () => closeSuccessModalAdd(successModal));
+    iconClose.addEventListener('click', () => closeSuccessModal(successModal));
     
     openModal(successModal);
 }
 
-// Fermer modal succes projet supprimé
-function closeSuccessModalAdd() {
+/**
+ * Close the success modal
+ */
+function closeSuccessModal() 
+{
     closeModal('.success-modal');
 }
 
-
 /*********************************************************************************/
-//****************                 MODAL : GENERAL              ******************/
+/*****************                 GENERAL MODAL                ******************/
 /*********************************************************************************/
 
-// Ouvre la modale
-function openModal(modal) {
+/**
+ * Open the modal
+ * @param {HTMLElement} modal - The modal element to open
+ */
+function openModal(modal) 
+{
     modal.style.display = "flex";
 }
 
-// Fermer modale
-function closeModal(modalSelector = '.modal') {
+/**
+ * Close the modal
+ * @param {string} [modalSelector='.modal'] - The selector for the modal to close
+ */
+function closeModal(modalSelector = '.modal') 
+{
     const modal = document.querySelector(modalSelector);
     modal && (modal.style.display = 'none', modal.innerHTML = '');
 }
 
-// Fermer modale en cliquant sur window
-function closeClickWindow(modalSelector) {
+/**
+ * Close the modal when clicking outside of it
+ * @param {string} modalSelector - The selector for the modal
+ */
+function closeClickWindow(modalSelector) 
+{
     const modal = document.querySelector(modalSelector);
     modal && window.addEventListener('click', (event) => event.target === modal && closeModal(modalSelector));
 }
 
-// Création structure de base modale 
-function createModal(data, className, modalSelector = '.modal') {
+/**
+ * Create the modal structure and display it
+ * @param {Object} data - The data for the modal content (header, body, footer)
+ * @param {string} className - Additional class for modal content
+ * @param {string} [modalSelector='.modal'] - The selector for the modal
+ */
+function createModal(data, className, modalSelector = '.modal') 
+{
     let modal = document.querySelector(modalSelector);
     
     modal.innerHTML = '';

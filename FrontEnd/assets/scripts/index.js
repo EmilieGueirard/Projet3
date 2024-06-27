@@ -11,7 +11,7 @@ let categories = [];
 
 
 /**
- * Resets the gallery by clearing its inner HTML
+ * Clears the gallery
  */
 function resetGallery()
 {
@@ -19,8 +19,8 @@ function resetGallery()
 }
 
 /**
- * Creates the works list in .gallery
- * @param {Array} works - Array of works to be displayed
+ * Displays works in the gallery
+ * @param {Array} works - List of works to display
  */
 function createWorks(works) 
 {
@@ -29,9 +29,8 @@ function createWorks(works)
 }
 
 /**
- * Creates an HTML Node for a single work and appends it to the gallery
- * @param {Object} work - The work object to create an HTML node for
- * 
+ * Creates and adds a work element to the gallery
+ * @param {Object} work - Work object to create element for
  */
 function createWork(work)
 {
@@ -52,8 +51,8 @@ function createWork(work)
 }
 
 /**
- * Creates category buttons and appends them to the filters element.
- * @param {Array} categories - Array of category objects.
+ * Creates category buttons and adds them to filters
+ * @param {Array} categories - List of category objects
  */
 function createCategories(categories)
 {
@@ -62,9 +61,8 @@ function createCategories(categories)
 }
 
 /**
- * Creates a button for a single category and appends it to the filters element
- * @param {Object} category - The category object to create a button
- * return void
+ * Creates and adds a category button to filters
+ * @param {Object} category - Category object to create button for
  */
 function createCategory(category)
 {
@@ -75,8 +73,8 @@ function createCategory(category)
 }
 
 /**
- * Filters the works by category ID and updates the gallery display
- * @param {number} categoryId - The ID of the category to filter works
+ * Filters works by category and updates gallery
+ * @param {number} categoryId - ID of the category to filter works by
  */
 function filterWorks(categoryId) {
     if (categoryId === 0) {
@@ -88,8 +86,7 @@ function filterWorks(categoryId) {
 }
 
 /**
- * IIFE to fetch and display works and categories once the script is loaded
- * This function will run immediately after it is defined
+ * Fetches and displays works and categories when script loads
  */
 (async function() {
 
