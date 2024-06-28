@@ -21,7 +21,7 @@ form?.addEventListener('submit', async (event) => {
     event.preventDefault();
     hideError();
 
-    const response = await httpPost(authentication_url, {
+    let response = await httpPost(authentication_url, {
         email: form.email.value,
         password: form.password.value
     });
@@ -77,9 +77,10 @@ function saveToken(token) {
  */
 function showError(message) 
 {
-    const errNode = document.createElement('div');
-    errNode.classList.add('error-message');
-    errNode.textContent = message;
+    let errNode = document.createElement('div');
+        errNode.classList.add('error-message');
+        errNode.textContent = message;
+    
     form.prepend(errNode);
 }
 
@@ -105,8 +106,9 @@ function isAuthenticated()
  */
 function addAuthLink() 
 {
-    const navList = document.querySelector('nav ul');
-    const authLink = createAuthLink();
+    let navList = document.querySelector('nav ul');
+    let authLink = createAuthLink();
+    
     if (navList) {
         insertAuthLink(navList, authLink);
         if (isAuthenticated()) {
@@ -121,12 +123,14 @@ function addAuthLink()
  */
 function createAuthLink() 
 {
-    const authLink = document.createElement('li');
-    const authAnchor = document.createElement('a');
-    authAnchor.classList.add('nav-link');
-    authAnchor.textContent = "login";
-    authAnchor.href = './login.html';
-    authLink.appendChild(authAnchor);
+    let authAnchor = document.createElement('a');
+        authAnchor.classList.add('nav-link');
+        authAnchor.textContent = "login";
+        authAnchor.href = './login.html';
+
+    let authLink = document.createElement('li');
+        authLink.appendChild(authAnchor);
+
     return authLink;
 }
 
@@ -136,13 +140,13 @@ function createAuthLink()
  */
 function setLogoutLink(authLink) 
 {
-    const authAnchor = authLink.querySelector('a');
-    authAnchor.textContent = "logout";
-    authAnchor.href = '#';
-    authAnchor.addEventListener('click', function(event) {
-        event.preventDefault();
-        logout();
-    });
+    let authAnchor = authLink.querySelector('a');
+        authAnchor.textContent = "logout";
+        authAnchor.href = '#';
+        authAnchor.addEventListener('click', function(event) {
+            event.preventDefault();
+            logout();
+        });
 }
 
 /**
@@ -181,19 +185,18 @@ function displayEditionMode()
  */
 function styleModif() 
 {
-    const editionMode = document.createElement('div');
-    editionMode.classList.add('editionMode');
+    let icon = document.createElement('i');
+        icon.classList.add('fa-regular', 'fa-pen-to-square');
 
-    const icon = document.createElement('i');
-    icon.classList.add('fa-regular', 'fa-pen-to-square');
+    let editionText = document.createElement('p');
+        editionText.textContent = "Mode édition";
 
-    const editionText = document.createElement('p');
-    editionText.textContent = "Mode édition";
+    let editionMode = document.createElement('div');
+        editionMode.classList.add('editionMode');
+        editionMode.appendChild(icon);
+        editionMode.appendChild(editionText);
 
     topBar.style.margin = '38px 0 0 0';
-
-    editionMode.appendChild(icon);
-    editionMode.appendChild(editionText);
     topBar.appendChild(editionMode);
 }
 
@@ -210,20 +213,18 @@ function deleteFilters()
  */
 function addModifyLink() 
 {
-    const projectsSection = document.querySelector('#portfolio .projects');
+    let icon = document.createElement('i');
+        icon.classList.add('fa-regular', 'fa-pen-to-square');
 
-    const modifyLink = document.createElement('a');
-    modifyLink.href = '#modal';
-    modifyLink.dataset.modal = 'gallery';
-    modifyLink.classList.add('modify-link');
+    let linkText = document.createTextNode("modifier");
 
-    const icon = document.createElement('i');
-    icon.classList.add('fa-regular', 'fa-pen-to-square');
+    let modifyLink = document.createElement('a');
+        modifyLink.href = '#modal';
+        modifyLink.dataset.modal = 'gallery';
+        modifyLink.classList.add('modify-link');
+        modifyLink.appendChild(icon);
+        modifyLink.appendChild(linkText);
 
-    const linkText = document.createTextNode("modifier");
-
-    modifyLink.appendChild(icon);
-    modifyLink.appendChild(linkText);
-
-    projectsSection.appendChild(modifyLink);
+    let projectsSection = document.querySelector('#portfolio .projects');
+        projectsSection.appendChild(modifyLink);
 }

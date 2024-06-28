@@ -9,13 +9,13 @@ const token = sessionStorage.getItem('token');
 /**
  * Create modal containers
  */
-const galleryModal = document.createElement('div');
-galleryModal.classList.add('modal', 'gallery-modal');
-document.body.appendChild(galleryModal);
+let galleryModal = document.createElement('div');
+    galleryModal.classList.add('modal', 'gallery-modal');
+    document.body.appendChild(galleryModal);
 
-const confirmationModal = document.createElement('div');
-confirmationModal.classList.add('modal', 'confirmation-modal');
-document.body.appendChild(confirmationModal);
+let confirmationModal = document.createElement('div');
+    confirmationModal.classList.add('modal', 'confirmation-modal');
+    document.body.appendChild(confirmationModal);
 
 /**
  * Add triggers to open modals
@@ -45,15 +45,16 @@ document.addEventListener('DOMContentLoaded', function() {
 /**
  * Create and display the photo gallery modal
  */
-function modalGallery() {
-    let body = document.createElement('div');
-    body.classList.add('gallery-body');
-
+function modalGallery() 
+{
     let btn = document.createElement('button');
-    btn.textContent = "Ajouter une photo";
-    btn.dataset.modal = 'addPhoto';
-    btn.classList.add('gallery-btn');
-    btn.addEventListener('click', modalAddPhoto);
+        btn.textContent = "Ajouter une photo";
+        btn.dataset.modal = 'addPhoto';
+        btn.classList.add('gallery-btn');
+        btn.addEventListener('click', modalAddPhoto);
+
+    let body = document.createElement('div');
+        body.classList.add('gallery-body');
 
     createModal({
         header: "Galerie photo",
@@ -71,17 +72,19 @@ function modalGallery() {
 function createAndDisplayWorks(works) 
 {
     resetWorksModalGallery();
-    const galleryBody = document.querySelector('.gallery-body');
+
     works.forEach(work => {
-        const article = document.createElement('article');
-        article.setAttribute('data-work-id', work.id);
-        const img = document.createElement('img');
+        let img = document.createElement('img');
+            img.src = work.imageUrl;
 
-        img.src = work.imageUrl;
+        let article = document.createElement('article');
+            article.setAttribute('data-work-id', work.id);
+            article.appendChild(img);
+        
+        let galleryBody = document.querySelector('.gallery-body');
+            galleryBody.appendChild(article);
 
-        article.appendChild(img);
         addTrashIcon(article);
-        galleryBody.appendChild(article);
     });
 }
 
@@ -100,8 +103,8 @@ async function fetchWorks()
  */
 function addTrashIcon(article) 
 {
-    const trashIcon = document.createElement('i');
-    trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon');
+    let trashIcon = document.createElement('i');
+        trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon');
 
     article.appendChild(trashIcon);
     trashIconClick(trashIcon, article);
@@ -124,8 +127,8 @@ function trashIconClick(trashIcon, article)
  */
 function resetWorksModalGallery() 
 {
-    const galleryBody = document.querySelector('.gallery-body');
-    galleryBody.innerHTML = ''; 
+    let galleryBody = document.querySelector('.gallery-body');
+        galleryBody.innerHTML = ''; 
 }
 
 /*********************************************************************************/
@@ -138,20 +141,19 @@ function resetWorksModalGallery()
  */
 function showConfirmationModal(article) 
 {
-    let footer = document.createElement('div'); 
-    footer.classList.add('modal-footer');
-
     let cancelButton = document.createElement('button');
-    cancelButton.textContent = "Annuler";
-    cancelButton.classList.add('modal-btn', 'cancel-btn');
-    cancelButton.addEventListener('click', () => closeModal('.confirmation-modal'));
+        cancelButton.textContent = "Annuler";
+        cancelButton.classList.add('modal-btn', 'cancel-btn');
+        cancelButton.addEventListener('click', () => closeModal('.confirmation-modal'));
 
     let confirmButton = document.createElement('button');
-    confirmButton.textContent = "Confirmer";
-    confirmButton.classList.add('modal-btn', 'confirm-btn');
-    confirmButton.addEventListener('click', () => handleConfirmClick(article));
+        confirmButton.textContent = "Confirmer";
+        confirmButton.classList.add('modal-btn', 'confirm-btn');
+        confirmButton.addEventListener('click', () => handleConfirmClick(article));
  
-    footer.append(cancelButton, confirmButton);
+    let footer = document.createElement('div'); 
+        footer.classList.add('modal-footer');
+        footer.append(cancelButton, confirmButton);
 
     createModal({
         header: "Confirmation",
@@ -167,9 +169,10 @@ function showConfirmationModal(article)
 async function handleConfirmClick(article) 
 {
     closeModal('.confirmation-modal');
-    const workId = article.getAttribute('data-work-id');
-    const success = await httpDelete(`${works_url}/${workId}`);
-    success && (works = await fetchWorks(), createAndDisplayWorks(works), createWorks(works), showSuccessModal("Projet supprimé avec succès"));
+    let workId = article.getAttribute('data-work-id');
+
+    let success = await httpDelete(`${works_url}/${workId}`);
+        success && (works = await fetchWorks(), createAndDisplayWorks(works), createWorks(works), showSuccessModal("Projet supprimé avec succès"));
 }
 
 /*********************************************************************************/
@@ -181,28 +184,21 @@ async function handleConfirmClick(article)
  */
 function modalAddPhoto() 
 {
-    let header = document.createElement('div');
-    header.textContent = "Ajout photo";
-    header.classList.add('modal-title-header');
+    let submitButton = createFormSubmitButton();
+        submitButton.addEventListener('click', handleSubmit);
+    
+    let formContent = document.createElement("div");
+        formContent.classList.add("form-content");
+        formContent.appendChild(createFormPhotoComponent());
+        formContent.appendChild(createFormTitleComponent());
+        formContent.appendChild(createFormCategoryComponent());
 
     let body = document.createElement('form');
-    body.classList.add("form-add-work");
-
-    const formContent = document.createElement("div");
-    formContent.classList.add("form-content");
-
-    formContent.appendChild(createFormPhotoSection());
-    formContent.appendChild(createFormTitleSection());
-    formContent.appendChild(createFormCategorySection());
-
-    body.appendChild(formContent);
-
-    const submitButton = createFormSubmitButton();
-    submitButton.addEventListener('click', handleSubmit);
-    
+        body.classList.add("form-add-work");
+        body.appendChild(formContent);
 
     createModal({
-        header: header,
+        header: "Ajout photo",
         body: body,
         footer: submitButton
     });
@@ -215,53 +211,51 @@ function modalAddPhoto()
  * Create the photo upload section in the form
  * @returns {HTMLElement} - The photo section element
  */
-function createFormPhotoSection() 
+function createFormPhotoComponent() 
 {
-    const photoDiv = document.createElement("div");
-    photoDiv.classList.add("form-add-photo");
+    let errorContainer = document.createElement("p");
+        errorContainer.classList.add("error-message");
 
-    const icon = document.createElement("i");
-    icon.classList.add("fa-regular", "fa-image");
+    let fileErrorContainer = document.createElement("p");
+        fileErrorContainer.classList.add("file-error-message");
 
-    const label = document.createElement("label");
-    label.classList.add("form-button-add-photo");
-    label.setAttribute("for", "input-file");
-    label.textContent = "+ Ajouter photo";
+    let imgPreview = document.createElement("img");
+        imgPreview.id = "img-preview";
+        imgPreview.style.display = "none";
+        imgPreview.style.maxWidth = "100%";
+        imgPreview.style.maxHeight = "169px";
 
-    const inputFile = document.createElement("input");
-    inputFile.type = "file";
-    inputFile.id = "input-file";
-    inputFile.classList.add("form-work-photo");
-    inputFile.accept = "image/jpeg, image/png";
+    let fileInfo = document.createElement("p");
+        fileInfo.classList.add("p-photo");
+        fileInfo.textContent = "jpg, png : 4mo max";
 
-    const fileInfo = document.createElement("p");
-    fileInfo.classList.add("p-photo");
-    fileInfo.textContent = "jpg, png : 4mo max";
+    let inputFile = document.createElement("input");
+        inputFile.type = "file";
+        inputFile.id = "input-file";
+        inputFile.classList.add("form-work-photo");
+        inputFile.accept = "image/jpeg, image/png";
+        inputFile.addEventListener('change', (event) => {
+            handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorContainer);
+            checkFormValidity();
+        });
 
-    const imgPreview = document.createElement("img");
-    imgPreview.id = "img-preview";
-    imgPreview.style.display = "none";
-    imgPreview.style.maxWidth = "100%";
-    imgPreview.style.maxHeight = "169px";
+    let label = document.createElement("label");
+        label.classList.add("form-button-add-photo");
+        label.setAttribute("for", "input-file");
+        label.textContent = "+ Ajouter photo";
+        label.appendChild(inputFile);
+    
+    let icon = document.createElement("i");
+        icon.classList.add("fa-regular", "fa-image");
 
-    const fileErrorContainer = document.createElement("p");
-    fileErrorContainer.classList.add("file-error-message");
-
-    const errorContainer = document.createElement("p");
-    errorContainer.classList.add("error-message");
-
-    inputFile.addEventListener('change', (event) => {
-        handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorContainer);
-        checkFormValidity();
-    });
-
-    label.appendChild(inputFile);
-    photoDiv.appendChild(icon);
-    photoDiv.appendChild(label);
-    photoDiv.appendChild(fileInfo);
-    photoDiv.appendChild(imgPreview);
-    photoDiv.appendChild(fileErrorContainer);
-    photoDiv.appendChild(errorContainer);
+    let photoDiv = document.createElement("div");
+        photoDiv.classList.add("form-add-photo");
+        photoDiv.appendChild(icon);
+        photoDiv.appendChild(label);
+        photoDiv.appendChild(fileInfo);
+        photoDiv.appendChild(imgPreview);
+        photoDiv.appendChild(fileErrorContainer);
+        photoDiv.appendChild(errorContainer);
 
     return photoDiv;
 }
@@ -271,29 +265,28 @@ function createFormPhotoSection()
  * @returns {HTMLElement} - The title section element
  */
 
-function createFormTitleSection() 
+function createFormTitleComponent() 
 {
-    const titleDiv = document.createElement("div");
-    titleDiv.classList.add("form-title");
+    let errorContainer = document.createElement("p");
+        errorContainer.classList.add("error-message");
 
-    const label = document.createElement("label");
-    label.setAttribute("for", "input-title");
-    label.textContent = "Titre";
+    let input = document.createElement("input");
+        input.type = "text";
+        input.name = "titre";
+        input.id = "input-title";
+        input.classList.add("form-title-work");
+        input.setAttribute("autocomplete", "off");
+        input.addEventListener('input', checkFormValidity);
 
-    const input = document.createElement("input");
-    input.type = "text";
-    input.name = "titre";
-    input.id = "input-title";
-    input.classList.add("form-title-work");
-    input.setAttribute("autocomplete", "off");
-    input.addEventListener('input', checkFormValidity);
+    let label = document.createElement("label");
+        label.setAttribute("for", "input-title");
+        label.textContent = "Titre";    
 
-    const errorContainer = document.createElement("p");
-    errorContainer.classList.add("error-message");
-
-    titleDiv.appendChild(label);
-    titleDiv.appendChild(input);
-    titleDiv.appendChild(errorContainer);
+    let titleDiv = document.createElement("div");
+        titleDiv.classList.add("form-title");
+        titleDiv.appendChild(label);
+        titleDiv.appendChild(input);
+        titleDiv.appendChild(errorContainer);
 
     return titleDiv;
 }
@@ -302,29 +295,28 @@ function createFormTitleSection()
  * Create the category selection section in the form
  * @returns {HTMLElement} - The category section element
  */
-function createFormCategorySection() 
+function createFormCategoryComponent() 
 {
-    const categoryDiv = document.createElement("div");
-    categoryDiv.classList.add("form-categories");
+    let errorContainer = document.createElement("p");
+        errorContainer.classList.add("error-message");
 
-    const label = document.createElement("label");
-    label.setAttribute("for", "categories");
-    label.textContent = "Catégorie";
+    let icon = document.createElement("i");
+        icon.classList.add("fa-solid", "fa-chevron-down", "select-icon");
 
-    const select = document.createElement("select");
-    select.id = "categories";
-    select.addEventListener('change', checkFormValidity);
-    
-    const icon = document.createElement("i");
-    icon.classList.add("fa-solid", "fa-chevron-down", "select-icon");
+    let select = document.createElement("select");
+        select.id = "categories";
+        select.addEventListener('change', checkFormValidity);
 
-    const errorContainer = document.createElement("p");
-    errorContainer.classList.add("error-message");
+    let label = document.createElement("label");
+        label.setAttribute("for", "categories");
+        label.textContent = "Catégorie";
    
-    categoryDiv.appendChild(label);
-    categoryDiv.appendChild(select);
-    categoryDiv.appendChild(icon);
-    categoryDiv.appendChild(errorContainer);
+    let categoryDiv = document.createElement("div");
+        categoryDiv.classList.add("form-categories");
+        categoryDiv.appendChild(label);
+        categoryDiv.appendChild(select);
+        categoryDiv.appendChild(icon);
+        categoryDiv.appendChild(errorContainer);
 
     return categoryDiv;
 }
@@ -335,13 +327,13 @@ function createFormCategorySection()
  */
 function createFormSubmitButton() 
 {
-    const submitButton = document.createElement("input");
-    submitButton.type = "button";
-    submitButton.value = "Valider";
-    submitButton.id = "form-button-submit";
-    submitButton.disabled = true;
-    submitButton.classList.add('submit-button');
-    submitButton.addEventListener('click', handleSubmit);
+    let submitButton = document.createElement("input");
+        submitButton.type = "button";
+        submitButton.value = "Valider";
+        submitButton.id = "form-button-submit";
+        submitButton.disabled = true;
+        submitButton.classList.add('submit-button');
+        submitButton.addEventListener('click', handleSubmit);
 
     return submitButton;
 }
@@ -351,11 +343,12 @@ function createFormSubmitButton()
  */
 function iconBack() 
 {
-    let modalContent = document.querySelector('.modal-content');
     let iconBack = document.createElement('i');
-    iconBack.classList.add('icon-back', 'fa-solid', 'fa-arrow-left');
-    iconBack.addEventListener('click', modalGallery);
-    modalContent.prepend(iconBack);
+        iconBack.classList.add('icon-back', 'fa-solid', 'fa-arrow-left');
+        iconBack.addEventListener('click', modalGallery);
+    
+    let modalContent = document.querySelector('.modal-content');
+        modalContent.prepend(iconBack);
 }
 
 /**
@@ -389,11 +382,12 @@ function handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorCon
     fileErrorContainer.textContent = "";
 
     const isValidFile = checkFileSize(file, fileErrorContainer);
+    
     if (isValidFile) {
-        const reader = new FileReader();
-        reader.onload = (event) => displayImagePreview(event, imgPreview, icon, label, fileInfo, fileErrorContainer);
-        reader.readAsDataURL(file);
-    }
+        let reader = new FileReader();
+            reader.onload = (event) => displayImagePreview(event, imgPreview, icon, label, fileInfo, fileErrorContainer);
+            reader.readAsDataURL(file);
+        }
     
     checkFormValidity(!isValidFile);
 }
@@ -401,8 +395,10 @@ function handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorCon
 // Vérifier la taille du fichier
 function checkFileSize(file, fileErrorContainer) 
 {
-    const maxSize = 4 * 1024 * 1024;
+    let maxSize = 4 * 1024 * 1024;
+
     file.size > maxSize && (fileErrorContainer.textContent = "La taille du fichier ne doit pas dépasser 4 Mo.");
+
     return file.size <= maxSize;
 }
 
@@ -435,9 +431,10 @@ function displayImagePreview(event, imgPreview, icon, label, fileInfo, fileError
  */
 function addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer) 
 {
-    const trashIcon = document.createElement('i');
-    trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon', 'trash-icon-preview');
-    trashIcon.addEventListener('click', () => removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileErrorContainer));
+    let trashIcon = document.createElement('i');
+        trashIcon.classList.add('fa-solid', 'fa-trash-can', 'trash-icon', 'trash-icon-preview');
+        trashIcon.addEventListener('click', () => removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileErrorContainer));
+
     imgPreview.parentElement.appendChild(trashIcon);
 }
 
@@ -459,7 +456,9 @@ function removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileEr
     fileInfo.style.display = "block";
     fileErrorContainer.textContent = "";
     trashIcon.remove();
+
     document.getElementById('input-file').value = ""; 
+    
     checkFormValidity(); 
 }
 
@@ -474,12 +473,12 @@ async function handleSubmit()
     const fileInput = document.getElementById('input-file');
     const file = fileInput.files[0];
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('category', category);
-    formData.append('image', file);
+    let formData = new FormData();
+        formData.append('title', title);
+        formData.append('category', category);
+        formData.append('image', file);
 
-    const newWork = await httpPostFormData(works_url, formData);
+    let newWork = await httpPostFormData(works_url, formData);
         
     if (newWork) {
         works.push(newWork);
@@ -494,15 +493,15 @@ async function handleSubmit()
  */
 function resetForm() 
 {
-    const formContent = document.querySelector('.form-content');
-    formContent.innerHTML = "";
-
-    formContent.appendChild(createFormPhotoSection());
-    formContent.appendChild(createFormTitleSection());
-    formContent.appendChild(createFormCategorySection());
+    let formContent = document.querySelector('.form-content');
+        formContent.innerHTML = "";
+        formContent.appendChild(createFormPhotoSection());
+        formContent.appendChild(createFormTitleSection());
+        formContent.appendChild(createFormCategorySection());
 
     document.getElementById('form-button-submit').disabled = true;
     document.getElementById('form-button-submit').classList.remove('active');
+
     loadCategories();
 }
 
@@ -531,9 +530,9 @@ function checkFormValidity()
     if (!validateTitleInput(titleInput)) isValid = false;
     if (!validateSelectCategories(selectCategories)) isValid = false;
 
-    const submitButton = document.getElementById('form-button-submit');
-    submitButton.disabled = !isValid;
-    submitButton.classList.toggle('active', isValid);
+    let submitButton = document.getElementById('form-button-submit');
+        submitButton.disabled = !isValid;
+        submitButton.classList.toggle('active', isValid);
 }
 
 /**
@@ -591,9 +590,10 @@ function validateSelectCategories(select)
  */
 function showFieldError(field, message) 
 {
-    const parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
-    const errorContainer = parentDiv.querySelector(".error-message");
-    errorContainer.textContent = message;
+    let parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
+
+    let errorContainer = parentDiv.querySelector(".error-message");
+        errorContainer.textContent = message;
 }
 
 /**
@@ -602,9 +602,10 @@ function showFieldError(field, message)
  */
 function hideFieldError(field) 
 {
-    const parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
-    const errorContainer = parentDiv.querySelector(".error-message");
-    errorContainer.textContent = "";
+    let parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
+
+    let errorContainer = parentDiv.querySelector(".error-message");
+        errorContainer.textContent = "";
 }
 
 /*********************************************************************************/
@@ -618,11 +619,11 @@ function hideFieldError(field)
 function showSuccessModal(message) 
 {
     let successModal = document.querySelector('.success-modal');
-    if (!successModal) {
-        successModal = document.createElement('div');
-        successModal.classList.add('modal', 'success-modal');
-        document.body.appendChild(successModal);
-    }
+        if (!successModal) {
+            successModal = document.createElement('div');
+            successModal.classList.add('modal', 'success-modal');
+            document.body.appendChild(successModal);
+        }
     
     createModal({
         header: "",
@@ -630,9 +631,9 @@ function showSuccessModal(message)
         footer: ""
     }, 'small-modal', '.success-modal');
 
-    const iconClose = document.querySelector('.success-modal .icon-close');
-    iconClose.addEventListener('click', () => closeSuccessModal(successModal));
-    
+    let iconClose = document.querySelector('.success-modal .icon-close');
+        iconClose.addEventListener('click', () => closeSuccessModal(successModal));
+
     openModal(successModal);
 }
 
@@ -663,8 +664,8 @@ function openModal(modal)
  */
 function closeModal(modalSelector = '.modal') 
 {
-    const modal = document.querySelector(modalSelector);
-    modal && (modal.style.display = 'none', modal.innerHTML = '');
+    let modal = document.querySelector(modalSelector);
+        modal && (modal.style.display = 'none', modal.innerHTML = '');
 }
 
 /**
@@ -673,8 +674,8 @@ function closeModal(modalSelector = '.modal')
  */
 function closeClickWindow(modalSelector) 
 {
-    const modal = document.querySelector(modalSelector);
-    modal && window.addEventListener('click', (event) => event.target === modal && closeModal(modalSelector));
+    let modal = document.querySelector(modalSelector);
+        modal && window.addEventListener('click', (event) => event.target === modal && closeModal(modalSelector));
 }
 
 /**
@@ -685,41 +686,40 @@ function closeClickWindow(modalSelector)
  */
 function createModal(data, className, modalSelector = '.modal') 
 {
-    let modal = document.querySelector(modalSelector);
-    
-    modal.innerHTML = '';
-
-    let modalContent = document.createElement('div');
-    modalContent.classList.add('modal-content');
-    if (className) {
-        modalContent.classList.add(className);
-    }
-    modal.append(modalContent);
-
     let iconClose = document.createElement('i');
-    iconClose.classList.add('icon-close', 'fa-solid', 'fa-xmark');
-    iconClose.addEventListener('click', () => closeModal(modalSelector));
-    modalContent.append(iconClose);
+        iconClose.classList.add('icon-close', 'fa-solid', 'fa-xmark');
+        iconClose.addEventListener('click', () => closeModal(modalSelector));
+  
+    let modalContent = document.createElement('div');
+        modalContent.classList.add('modal-content');
+            if (className) {
+                modalContent.classList.add(className);
+            }
+        modalContent.append(iconClose);
+    
+    let modal = document.querySelector(modalSelector);
+        modal.innerHTML = '';
+        modal.append(modalContent);
 
     if (data.header) {
         let header = document.createElement('div');
-        header.classList.add('modal-header');
-        header.append(data.header);
-        modalContent.append(header);
+            header.classList.add('modal-header');
+            header.append(data.header);
+            modalContent.append(header);
     }
 
     if (data.body) {
         let body = document.createElement('div');
-        body.classList.add('modal-body');
-        body.append(data.body);
-        modalContent.append(body);
+            body.classList.add('modal-body');
+            body.append(data.body);
+            modalContent.append(body);
     }
 
     if (data.footer) {
         let footer = document.createElement('div');
-        footer.classList.add('modal-footer');
-        footer.append(data.footer);
-        modalContent.append(footer);
+            footer.classList.add('modal-footer');
+            footer.append(data.footer);
+            modalContent.append(footer);
     }
 
     openModal(modal);

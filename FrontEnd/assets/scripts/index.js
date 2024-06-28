@@ -34,18 +34,17 @@ function createWorks(works)
  */
 function createWork(work)
 {
-    let figure = document.createElement("figure");
-    figure.setAttribute('data-work-id', work.id); 
+    let figcaption = document.createElement("figcaption");
+        figcaption.innerText = work.title;
 
     let img = document.createElement("img");
-    img.src = work.imageUrl;
-    img.alt = work.title;
+        img.src = work.imageUrl;
+        img.alt = work.title;
 
-    let figcaption = document.createElement("figcaption");
-    figcaption.innerText = work.title;
-    
-    figure.appendChild(img);
-    figure.appendChild(figcaption);
+    let figure = document.createElement("figure");
+        figure.setAttribute('data-work-id', work.id); 
+        figure.appendChild(img);
+        figure.appendChild(figcaption);
 
     gallery.appendChild(figure);
 }
@@ -67,8 +66,9 @@ function createCategories(categories)
 function createCategory(category)
 {
     let button = document.createElement("button");
-    button.innerText = category.name; 
-    button.addEventListener("click", () => filterWorks(category.id)); 
+        button.innerText = category.name; 
+        button.addEventListener("click", () => filterWorks(category.id)); 
+
     filters.appendChild(button); 
 }
 
@@ -80,8 +80,8 @@ function filterWorks(categoryId) {
     if (categoryId === 0) {
         createWorks(works); 
     } else {
-        const filteredWorks = works.filter(work => work.category && work.category.id === categoryId);
-        createWorks(filteredWorks);
+        let filteredWorks = works.filter(work => work.category && work.category.id === categoryId);
+            createWorks(filteredWorks);
     }
 }
 
