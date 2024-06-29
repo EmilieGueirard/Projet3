@@ -19,32 +19,41 @@ async function httpGet(url)
 }
 
 /**
- * Send a POST request with JSON data
+ * Send a POST request with JSON data or FormData
  * @param {string} url - The URL to send the request to
- * @param {Object} data - The data to send
+ * @param {Object|FormData} data - The data to send
  * @param {Object} [headers={}] - Optional headers
- * @returns {Promise<Array>} - The response data
+ * @returns {Promise<Object|null>} - The response data
  */
-async function httpPost(url, data, headers={})
-{
-    headers = Object.assign(headers, { 
-        'Content-Type': 'application/json'
-    });
+async function httpPost(url, data, headers = {}) {
+    let options = {
+        method: 'POST',
+        headers: Object.assign({}, headers),
+        body: null
+    };
+
+    if (data instanceof FormData) {
+        options.body = data;
+        options.headers = Object.assign(options.headers, {
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+        });
+        delete options.headers['Content-Type']; 
+    } else {
+        options.body = JSON.stringify(data);
+        options.headers = Object.assign(options.headers, {
+            'Content-Type': 'application/json'
+        });
+    }
 
     try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: headers
-        });
+        const response = await fetch(url, options);
         return await response.json();
-    }
-    catch (error) 
-    {
+    } catch (error) {
         console.error(error);
-        return [];
+        return null;
     }
 }
+
 
 /**
  * Send a DELETE request
@@ -72,33 +81,7 @@ async function httpDelete(url, headers={})
     }
 }
 
-/**
- * Send a POST request with FormData
- * @param {string} url - The URL to send the request to
- * @param {FormData} formData - The FormData object to send
- * @param {Object} [headers={}] - Optional headers
- * @returns {Promise<Object|null>} - The response data
- */
-async function httpPostFormData(url, formData, headers={})
-{
-    headers = Object.assign(headers, {
-        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-    });
 
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            body: formData,
-            headers: headers
-        });
-        return await response.json();
-    }
-    catch (error) 
-    {
-        console.error(error);
-        return null;
-    }
-}
 
 /**
  * Redirect to the specified URL

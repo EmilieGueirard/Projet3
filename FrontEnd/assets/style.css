@@ -48,6 +48,7 @@ table {
 	border-spacing: 0;
 }
 
+
 /******************** end reset css ********************/
 
 html, body {
@@ -83,7 +84,7 @@ section {
 	align-items: center;
 }
 
-h1{
+h1 {
 	display: flex;
 	flex-direction: column;
 	font-family: 'Syne';
@@ -98,7 +99,7 @@ h1 > span {
 	letter-spacing: 0.1em;
 }
 
-h2{
+h2 {
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
@@ -246,7 +247,7 @@ nav li {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -268,6 +269,7 @@ footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 }
+
 
 /************************ Login Page ********************/
 
@@ -325,11 +327,12 @@ footer nav ul {
 	cursor: pointer;
 }
 
-.error-message {
+.error-message-login {
     color: red;
     margin-bottom: 6px; 
 	margin-top: -20px;
 }
+
 
 /******************* Edition Mode *******************/
 
@@ -632,20 +635,28 @@ footer nav ul {
 
 /** Error message **/
 
+.error-message {
+    color: red;
+}
+
 .file-error-message {
     color: red;
     margin-top: 25px;
 }
 
-.form-title .error-message, .form-categories .error-message {
-    margin-left: 10px;
-    margin-top: 5px;
-    margin-bottom: -10px;
+.form-title .error-message,
+.form-categories .error-message {
+    visibility: hidden;
 }
 
-.form-add-photo .error-message {
-    margin-top: 0px;
+.form-title .error-message.active,
+.form-categories .error-message.active {
+    visibility: visible;
+    color: red;
+    margin-top: 3px;
+    margin-bottom: -17px;
 }
+
 
 /******************* Modal Confirma Delete Project *******************/
 

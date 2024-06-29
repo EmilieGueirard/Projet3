@@ -392,7 +392,12 @@ function handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorCon
     checkFormValidity(!isValidFile);
 }
 
-// Vérifier la taille du fichier
+/**
+ * Check the size of the file
+ * @param {File} file - The file to check
+ * @param {HTMLElement} fileErrorContainer - The container to display error messages
+ * @returns {boolean} - True if the file size is within the limit, false otherwise
+ */
 function checkFileSize(file, fileErrorContainer) 
 {
     let maxSize = 4 * 1024 * 1024;
@@ -478,7 +483,7 @@ async function handleSubmit()
         formData.append('category', category);
         formData.append('image', file);
 
-    let newWork = await httpPostFormData(works_url, formData);
+    let newWork = await httpPost(works_url, formData);
         
     if (newWork) {
         works.push(newWork);
@@ -495,9 +500,9 @@ function resetForm()
 {
     let formContent = document.querySelector('.form-content');
         formContent.innerHTML = "";
-        formContent.appendChild(createFormPhotoSection());
-        formContent.appendChild(createFormTitleSection());
-        formContent.appendChild(createFormCategorySection());
+        formContent.appendChild(createFormPhotoComponent());
+        formContent.appendChild(createFormTitleComponent());
+        formContent.appendChild(createFormCategoryComponent());
 
     document.getElementById('form-button-submit').disabled = true;
     document.getElementById('form-button-submit').classList.remove('active');
@@ -594,6 +599,7 @@ function showFieldError(field, message)
 
     let errorContainer = parentDiv.querySelector(".error-message");
         errorContainer.textContent = message;
+        errorContainer.classList.add('active');
 }
 
 /**
@@ -606,6 +612,8 @@ function hideFieldError(field)
 
     let errorContainer = parentDiv.querySelector(".error-message");
         errorContainer.textContent = "";
+        errorContainer.classList.remove('active');
+
 }
 
 /*********************************************************************************/

@@ -21,12 +21,13 @@ form?.addEventListener('submit', async (event) => {
     event.preventDefault();
     hideError();
 
-    let response = await httpPost(authentication_url, {
+    let data = {
         email: form.email.value,
         password: form.password.value
-    });
+    };
 
-    processAuthenticationResponse(response);
+    let response = await httpPost(authentication_url, data);
+        processAuthenticationResponse(response);
 });
 
 /**
@@ -78,7 +79,7 @@ function saveToken(token) {
 function showError(message) 
 {
     let errNode = document.createElement('div');
-        errNode.classList.add('error-message');
+        errNode.classList.add('error-message-login');
         errNode.textContent = message;
     
     form.prepend(errNode);
@@ -89,7 +90,7 @@ function showError(message)
  */
 function hideError() 
 {
-    document.querySelector(".error-message")?.remove();
+    document.querySelector('.error-message-login')?.remove();
 }
 
 /**
