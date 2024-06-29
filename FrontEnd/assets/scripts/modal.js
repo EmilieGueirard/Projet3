@@ -68,6 +68,7 @@ function modalGallery()
 /**
  * Create and add works to the gallery modal
  * @param {Array} works - List of works to display
+ * @returns void
  */
 function createAndDisplayWorks(works) 
 {
@@ -100,6 +101,7 @@ async function fetchWorks()
 /**
  * Add trash icon to an article
  * @param {HTMLElement} article - The article element to add the icon to
+ * @returns void
  */
 function addTrashIcon(article) 
 {
@@ -114,6 +116,7 @@ function addTrashIcon(article)
  * Add click event to trash icon
  * @param {HTMLElement} trashIcon - The trash icon element
  * @param {HTMLElement} article - The article element representing the work
+ * @returns void
  */
 function trashIconClick(trashIcon, article) 
 {
@@ -138,6 +141,7 @@ function resetWorksModalGallery()
 /**
  * Show confirmation modal for deleting a project
  * @param {HTMLElement} article - The article element representing the project
+ * @returns void
  */
 function showConfirmationModal(article) 
 {
@@ -165,6 +169,7 @@ function showConfirmationModal(article)
 /**
  * Handle confirm button click for deleting a project
  * @param {HTMLElement} article - The article element representing the project
+ * @returns void
  */
 async function handleConfirmClick(article) 
 {
@@ -374,6 +379,7 @@ async function loadCategories()
  * @param {HTMLElement} label - The label element
  * @param {HTMLElement} fileInfo - The file info element
  * @param {HTMLElement} fileErrorContainer - The file error container element
+ * @returns void
  */
 function handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorContainer) 
 {
@@ -415,6 +421,7 @@ function checkFileSize(file, fileErrorContainer)
  * @param {HTMLElement} label - The label element
  * @param {HTMLElement} fileInfo - The file info element
  * @param {HTMLElement} fileErrorContainer - The file error container element
+ * @returns void
  */
 function displayImagePreview(event, imgPreview, icon, label, fileInfo, fileErrorContainer) 
 {
@@ -433,6 +440,7 @@ function displayImagePreview(event, imgPreview, icon, label, fileInfo, fileError
  * @param {HTMLElement} label - The label element
  * @param {HTMLElement} fileInfo - The file info element
  * @param {HTMLElement} fileErrorContainer - The file error container element
+ * @returns void
  */
 function addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer) 
 {
@@ -451,6 +459,7 @@ function addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer)
  * @param {HTMLElement} fileInfo - The file info element
  * @param {HTMLElement} trashIcon - The trash icon element
  * @param {HTMLElement} fileErrorContainer - The file error container element
+ * @returns void
  */
 function removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileErrorContainer) 
 {
@@ -592,6 +601,7 @@ function validateSelectCategories(select)
  * Show field error message
  * @param {HTMLElement} field - The field element
  * @param {string} message - The error message
+ * @returns void
  */
 function showFieldError(field, message) 
 {
@@ -605,6 +615,7 @@ function showFieldError(field, message)
 /**
  * Hide field error message
  * @param {HTMLElement} field - The field element
+ * @returns void
  */
 function hideFieldError(field) 
 {
@@ -623,6 +634,7 @@ function hideFieldError(field)
 /**
  * Show success modal with a message
  * @param {string} message - The success message to display
+ * @returns void
  */
 function showSuccessModal(message) 
 {
@@ -660,6 +672,7 @@ function closeSuccessModal()
 /**
  * Open the modal
  * @param {HTMLElement} modal - The modal element to open
+ * @returns void
  */
 function openModal(modal) 
 {
@@ -669,6 +682,7 @@ function openModal(modal)
 /**
  * Close the modal
  * @param {string} [modalSelector='.modal'] - The selector for the modal to close
+ * @returns void
  */
 function closeModal(modalSelector = '.modal') 
 {
@@ -679,6 +693,7 @@ function closeModal(modalSelector = '.modal')
 /**
  * Close the modal when clicking outside of it
  * @param {string} modalSelector - The selector for the modal
+ * @returns void
  */
 function closeClickWindow(modalSelector) 
 {
@@ -691,6 +706,7 @@ function closeClickWindow(modalSelector)
  * @param {Object} data - The data for the modal content (header, body, footer)
  * @param {string} className - Additional class for modal content
  * @param {string} [modalSelector='.modal'] - The selector for the modal
+ * @returns void
  */
 function createModal(data, className, modalSelector = '.modal') 
 {

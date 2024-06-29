@@ -33,6 +33,7 @@ form?.addEventListener('submit', async (event) => {
 /**
  * Process authentication response
  * @param {Object} response - The response from the authentication request
+ * @returns void
  */
 function processAuthenticationResponse(response) 
 {
@@ -48,6 +49,7 @@ function processAuthenticationResponse(response)
 /**
  * Handle successful authentication
  * @param {string} token - The authentication token
+ * @returns void
  */
 function handleAuthenticationSuccess(token) 
 {
@@ -58,6 +60,7 @@ function handleAuthenticationSuccess(token)
 /**
  * Handle authentication error
  * @param {string} message - The error message to display
+ * @returns void
  */
 function handleAuthenticationError(message) 
 {
@@ -67,6 +70,7 @@ function handleAuthenticationError(message)
 /**
  * Save token to session storage
  * @param {string} token - The authentication token
+ * @returns void
  */
 function saveToken(token) {
     store.setItem('token', token);
@@ -75,6 +79,7 @@ function saveToken(token) {
 /**
  * Show error message
  * @param {string} message - The error message to display
+ * @returns void
  */
 function showError(message) 
 {
@@ -138,6 +143,7 @@ function createAuthLink()
 /**
  * Replace login link with logout
  * @param {HTMLElement} authLink - The login link element to replace
+ * @returns void
  */
 function setLogoutLink(authLink) 
 {
@@ -154,6 +160,7 @@ function setLogoutLink(authLink)
  * Insert auth link into the nav bar
  * @param {HTMLElement} navList - The nav list element
  * @param {HTMLElement} authLink - The auth link element
+ * @returns void
  */
 function insertAuthLink(navList, authLink) 
 {

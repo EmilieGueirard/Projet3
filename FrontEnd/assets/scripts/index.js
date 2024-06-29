@@ -21,6 +21,7 @@ function resetGallery()
 /**
  * Displays works in the gallery
  * @param {Array} works - List of works to display
+ * @returns void
  */
 function createWorks(works) 
 {
@@ -52,6 +53,7 @@ function createWork(work)
 /**
  * Creates category buttons and adds them to filters
  * @param {Array} categories - List of category objects
+ * @returns void
  */
 function createCategories(categories)
 {
@@ -62,6 +64,7 @@ function createCategories(categories)
 /**
  * Creates and adds a category button to filters
  * @param {Object} category - Category object to create button for
+ * @returns void
  */
 function createCategory(category)
 {
@@ -75,6 +78,7 @@ function createCategory(category)
 /**
  * Filters works by category and updates gallery
  * @param {number} categoryId - ID of the category to filter works by
+ * @returns void
  */
 function filterWorks(categoryId) {
     if (categoryId === 0) {

@@ -86,6 +86,7 @@ async function httpDelete(url, headers={})
 /**
  * Redirect to the specified URL
  * @param {string} url - The URL to redirect to
+ * @returns void
  */
 function redirectTo(url) 
 {
