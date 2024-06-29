@@ -5,10 +5,6 @@ const categories_url = "http://localhost:5678/api/categories";
 
 const token = sessionStorage.getItem('token');
 
-
-/**
- * Create modal containers
- */
 let galleryModal = document.createElement('div');
     galleryModal.classList.add('modal', 'gallery-modal');
     document.body.appendChild(galleryModal);
@@ -121,7 +117,7 @@ function addTrashIcon(article)
 function trashIconClick(trashIcon, article) 
 {
     trashIcon.addEventListener('click', () => {
-        showConfirmationModal(article);
+        showConfirmModal(article);
     });
 }
 
@@ -143,7 +139,7 @@ function resetWorksModalGallery()
  * @param {HTMLElement} article - The article element representing the project
  * @returns void
  */
-function showConfirmationModal(article) 
+function showConfirmModal(article) 
 {
     let cancelButton = document.createElement('button');
         cancelButton.textContent = "Annuler";
@@ -153,7 +149,7 @@ function showConfirmationModal(article)
     let confirmButton = document.createElement('button');
         confirmButton.textContent = "Confirmer";
         confirmButton.classList.add('modal-btn', 'confirm-btn');
-        confirmButton.addEventListener('click', () => handleConfirmClick(article));
+        confirmButton.addEventListener('click', () => confirmButtonClick(article));
  
     let footer = document.createElement('div'); 
         footer.classList.add('modal-footer');
@@ -171,7 +167,7 @@ function showConfirmationModal(article)
  * @param {HTMLElement} article - The article element representing the project
  * @returns void
  */
-async function handleConfirmClick(article) 
+async function confirmButtonClick(article) 
 {
     closeModal('.confirmation-modal');
     let workId = article.getAttribute('data-work-id');
@@ -189,14 +185,14 @@ async function handleConfirmClick(article)
  */
 function modalAddPhoto() 
 {
-    let submitButton = createFormSubmitButton();
+    let submitButton = formSubmitButton();
         submitButton.addEventListener('click', handleSubmit);
     
     let formContent = document.createElement("div");
         formContent.classList.add("form-content");
-        formContent.appendChild(createFormPhotoComponent());
-        formContent.appendChild(createFormTitleComponent());
-        formContent.appendChild(createFormCategoryComponent());
+        formContent.appendChild(formPhotoComponent());
+        formContent.appendChild(formTitleComponent());
+        formContent.appendChild(formCategoryComponent());
 
     let body = document.createElement('form');
         body.classList.add("form-add-work");
@@ -216,7 +212,7 @@ function modalAddPhoto()
  * Create the photo upload section in the form
  * @returns {HTMLElement} - The photo section element
  */
-function createFormPhotoComponent() 
+function formPhotoComponent() 
 {
     let errorContainer = document.createElement("p");
         errorContainer.classList.add("error-message");
@@ -270,7 +266,7 @@ function createFormPhotoComponent()
  * @returns {HTMLElement} - The title section element
  */
 
-function createFormTitleComponent() 
+function formTitleComponent() 
 {
     let errorContainer = document.createElement("p");
         errorContainer.classList.add("error-message");
@@ -300,7 +296,7 @@ function createFormTitleComponent()
  * Create the category selection section in the form
  * @returns {HTMLElement} - The category section element
  */
-function createFormCategoryComponent() 
+function formCategoryComponent() 
 {
     let errorContainer = document.createElement("p");
         errorContainer.classList.add("error-message");
@@ -330,7 +326,7 @@ function createFormCategoryComponent()
  * Create the submit button for the form
  * @returns {HTMLElement} - The submit button element
  */
-function createFormSubmitButton() 
+function formSubmitButton() 
 {
     let submitButton = document.createElement("input");
         submitButton.type = "button";
@@ -509,9 +505,9 @@ function resetForm()
 {
     let formContent = document.querySelector('.form-content');
         formContent.innerHTML = "";
-        formContent.appendChild(createFormPhotoComponent());
-        formContent.appendChild(createFormTitleComponent());
-        formContent.appendChild(createFormCategoryComponent());
+        formContent.appendChild(formPhotoComponent());
+        formContent.appendChild(formTitleComponent());
+        formContent.appendChild(formCategoryComponent());
 
     document.getElementById('form-button-submit').disabled = true;
     document.getElementById('form-button-submit').classList.remove('active');
@@ -531,22 +527,37 @@ async function refreshGalleries()
 /**
  * Check the validity of the form
  */
-function checkFormValidity() 
-{
+function checkFormValidity() {
     const photoInput = document.getElementById('input-file');
     const titleInput = document.getElementById('input-title');
     const selectCategories = document.getElementById('categories');
-    const fileErrorContainer = document.querySelector(".file-error-message");
 
     let isValid = true;
 
-    if (!validatePhotoInput(photoInput) || fileErrorContainer.textContent !== "") isValid = false;
-    if (!validateTitleInput(titleInput)) isValid = false;
-    if (!validateSelectCategories(selectCategories)) isValid = false;
+    isValid = validateInput(photoInput, validatePhotoInput, "Veuillez sélectionner un fichier") && isValid;
+    isValid = validateInput(titleInput, validateTitleInput, "Veuillez entrer un titre") && isValid;
+    isValid = validateInput(selectCategories, validateSelectCategories, "Veuillez sélectionner une catégorie") && isValid;
 
     let submitButton = document.getElementById('form-button-submit');
-        submitButton.disabled = !isValid;
-        submitButton.classList.toggle('active', isValid);
+    submitButton.disabled = !isValid;
+    submitButton.classList.toggle('active', isValid);
+}
+
+/**
+ * Validate an input field
+ * @param {HTMLElement} field - The input field element
+ * @param {function} validationFunction - The validation function for the field
+ * @param {string} errorMessage - The error message to display if validation fails
+ * @returns {boolean} - True if valid, false otherwise
+ */
+function validateInput(field, validationFunction, errorMessage) {
+    const isValid = validationFunction(field);
+    if (!isValid) {
+        showFieldError(field, errorMessage);
+    } else {
+        hideFieldError(field);
+    }
+    return isValid;
 }
 
 /**
@@ -554,15 +565,8 @@ function checkFormValidity()
  * @param {HTMLElement} input - The file input element
  * @returns {boolean} - True if valid, false otherwise
  */
-function validatePhotoInput(input) 
-{
-    if (input.files.length === 0) {
-        showFieldError(input, "Veuillez sélectionner un fichier");
-        return false;
-    } else {
-        hideFieldError(input);
-        return true;
-    }
+function validatePhotoInput(input) {
+    return input.files.length !== 0;
 }
 
 /**
@@ -570,15 +574,8 @@ function validatePhotoInput(input)
  * @param {HTMLElement} input - The title input element
  * @returns {boolean} - True if valid, false otherwise
  */
-function validateTitleInput(input) 
-{
-    if (input.value.trim() === "") {
-        showFieldError(input, "Veuillez entrer un titre");
-        return false;
-    } else {
-        hideFieldError(input);
-        return true;
-    }
+function validateTitleInput(input) {
+    return input.value.trim() !== "";
 }
 
 /**
@@ -586,15 +583,8 @@ function validateTitleInput(input)
  * @param {HTMLElement} select - The category select element
  * @returns {boolean} - True if valid, false otherwise
  */
-function validateSelectCategories(select) 
-{
-    if (select.value === "") {
-        showFieldError(select, "Veuillez sélectionner une catégorie");
-        return false;
-    } else {
-        hideFieldError(select);
-        return true;
-    }
+function validateSelectCategories(select) {
+    return select.value !== "";
 }
 
 /**
@@ -603,13 +593,11 @@ function validateSelectCategories(select)
  * @param {string} message - The error message
  * @returns void
  */
-function showFieldError(field, message) 
-{
+function showFieldError(field, message) {
     let parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
-
     let errorContainer = parentDiv.querySelector(".error-message");
-        errorContainer.textContent = message;
-        errorContainer.classList.add('active');
+    errorContainer.textContent = message;
+    errorContainer.classList.add('active');
 }
 
 /**
@@ -617,15 +605,13 @@ function showFieldError(field, message)
  * @param {HTMLElement} field - The field element
  * @returns void
  */
-function hideFieldError(field) 
-{
+function hideFieldError(field) {
     let parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
-
     let errorContainer = parentDiv.querySelector(".error-message");
-        errorContainer.textContent = "";
-        errorContainer.classList.remove('active');
-
+    errorContainer.textContent = "";
+    errorContainer.classList.remove('active');
 }
+
 
 /*********************************************************************************/
 /**************                 GENERAL SUCCES MODAL              ****************/
@@ -695,7 +681,7 @@ function closeModal(modalSelector = '.modal')
  * @param {string} modalSelector - The selector for the modal
  * @returns void
  */
-function closeClickWindow(modalSelector) 
+function closeClickOutsideModal(modalSelector) 
 {
     let modal = document.querySelector(modalSelector);
         modal && window.addEventListener('click', (event) => event.target === modal && closeModal(modalSelector));
@@ -747,5 +733,5 @@ function createModal(data, className, modalSelector = '.modal')
     }
 
     openModal(modal);
-    closeClickWindow(modalSelector); 
+    closeClickOutsideModal(modalSelector); 
 }

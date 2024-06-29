@@ -54,7 +54,6 @@ async function httpPost(url, data, headers = {}) {
     }
 }
 
-
 /**
  * Send a DELETE request
  * @param {string} url - The URL to send the request to
@@ -80,8 +79,6 @@ async function httpDelete(url, headers={})
         return false;
     }
 }
-
-
 
 /**
  * Redirect to the specified URL

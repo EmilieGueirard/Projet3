@@ -27,7 +27,7 @@ form?.addEventListener('submit', async (event) => {
     };
 
     let response = await httpPost(authentication_url, data);
-        processAuthenticationResponse(response);
+        authResponse(response);
 });
 
 /**
@@ -35,14 +35,14 @@ form?.addEventListener('submit', async (event) => {
  * @param {Object} response - The response from the authentication request
  * @returns void
  */
-function processAuthenticationResponse(response) 
+function authResponse(response) 
 {
     if (!response?.userId) {
-        handleAuthenticationError("Erreur dans l’identifiant ou le mot de passe");
+        authError("Erreur dans l’identifiant ou le mot de passe");
     } else if (response?.token) {
-        handleAuthenticationSuccess(response.token);
+        authSuccess(response.token);
     } else {
-        handleAuthenticationError("Une erreur est survenue");
+        authError("Une erreur est survenue");
     }
 }
 
@@ -51,7 +51,7 @@ function processAuthenticationResponse(response)
  * @param {string} token - The authentication token
  * @returns void
  */
-function handleAuthenticationSuccess(token) 
+function authSuccess(token) 
 {
     saveToken(token);
     redirectTo('./index.html');
@@ -62,7 +62,7 @@ function handleAuthenticationSuccess(token)
  * @param {string} message - The error message to display
  * @returns void
  */
-function handleAuthenticationError(message) 
+function authError(message) 
 {
     showError(message);
 }
