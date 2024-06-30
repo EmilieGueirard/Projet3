@@ -25,7 +25,8 @@ async function httpGet(url)
  * @param {Object} headers - Optional headers
  * @returns {Promise<Object|null>} - The response data
  */
-async function httpPost(url, data, headers = {}) {
+async function httpPost(url, data, headers = {}) 
+{
     const isFormData = data instanceof FormData;
     const options = {
         method: 'POST',

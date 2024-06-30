@@ -4,7 +4,7 @@ const authentication_url = 'http://localhost:5678/api/users/login';
 const store = sessionStorage;
 const form = document.querySelector('#loginForm');
 const topBar = document.querySelector('.topBar');
-const loginLogoutLink = document.getElementById("loginLink");
+const loginLogoutLink = document.getElementById('loginLink');
 
 /**
  * Add login/logout link to the nav bar and show edit mode if token is present
@@ -39,10 +39,8 @@ form?.addEventListener('submit', async (event) => {
 function authResponse(response) 
 {
     !response?.userId 
-    ? authError("Erreur dans l’identifiant ou le mot de passe") 
-    : response?.token 
-    ? authSuccess(response.token) 
-    : authError("Une erreur est survenue");
+    ? authError("Erreur dans l’identifiant ou le mot de passe") : response?.token 
+    ? authSuccess(response.token) : authError("Une erreur est survenue");
 }
 
 /**

@@ -1,7 +1,7 @@
 'use strict';
 
 const works_url = 'http://localhost:5678/api/works';
-const categories_url = "http://localhost:5678/api/categories";
+const categories_url = 'http://localhost:5678/api/categories';
 
 const token = sessionStorage.getItem('token');
 
@@ -527,7 +527,8 @@ async function refreshGalleries()
 /**
  * Check the validity of the form
  */
-function checkFormValidity() {
+function checkFormValidity() 
+{
     const photoInput = document.getElementById('input-file');
     const titleInput = document.getElementById('input-title');
     const selectCategories = document.getElementById('categories');
@@ -550,7 +551,8 @@ function checkFormValidity() {
  * @param {string} errorMessage - The error message to display if validation fails
  * @returns {boolean} - True if valid, false otherwise
  */
-function validateInput(field, validationFunction, errorMessage) {
+function validateInput(field, validationFunction, errorMessage) 
+{
     const isValid = validationFunction(field);
     isValid ? hideFieldError(field) : showFieldError(field, errorMessage);
     return isValid;
@@ -561,7 +563,8 @@ function validateInput(field, validationFunction, errorMessage) {
  * @param {HTMLElement} input - The file input element
  * @returns {boolean} - True if valid, false otherwise
  */
-function validatePhotoInput(input) {
+function validatePhotoInput(input) 
+{
     return input.files.length !== 0;
 }
 
@@ -570,7 +573,8 @@ function validatePhotoInput(input) {
  * @param {HTMLElement} input - The title input element
  * @returns {boolean} - True if valid, false otherwise
  */
-function validateTitleInput(input) {
+function validateTitleInput(input) 
+{
     return input.value.trim() !== '';
 }
 
@@ -579,7 +583,8 @@ function validateTitleInput(input) {
  * @param {HTMLElement} select - The category select element
  * @returns {boolean} - True if valid, false otherwise
  */
-function validateSelectCategories(select) {
+function validateSelectCategories(select) 
+{
     return select.value !== '';
 }
 
@@ -589,7 +594,8 @@ function validateSelectCategories(select) {
  * @param {string} message - The error message
  * @returns void
  */
-function showFieldError(field, message) {
+function showFieldError(field, message) 
+{
     let parentDiv = field.closest('.form-add-photo, .form-title, .form-categories');
     let errorContainer = parentDiv.querySelector('.error-message');
     errorContainer.textContent = message;
@@ -601,7 +607,8 @@ function showFieldError(field, message) {
  * @param {HTMLElement} field - The field element
  * @returns void
  */
-function hideFieldError(field) {
+function hideFieldError(field) 
+{
     let parentDiv = field.closest('.form-add-photo, .form-title, .form-categories');
     let errorContainer = parentDiv.querySelector('.error-message');
     errorContainer.textContent = "";

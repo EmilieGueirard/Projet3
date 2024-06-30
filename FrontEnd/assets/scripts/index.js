@@ -64,7 +64,7 @@ function createCategories(categories)
 /**
  * Creates and adds a category button to filters
  * @param {Object} category - Category object to create button for
- * @param {boolean} isDefault - Indique si ce bouton doit être sélectionné par défaut
+ * @param {boolean} isDefault - Button selected by default
  * @returns void
  */
 function createCategory(category, isDefault = false)
