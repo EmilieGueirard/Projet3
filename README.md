@@ -1,6 +1,6 @@
 # Formation Développeur Web - OpenClassrooms
 
-Projet 3 - Sophie Bluel :
+**Projet 3 - Sophie Bluel :**
 Créez une page web dynamique avec Javascript
 
 ## Information pour le lancer le code
