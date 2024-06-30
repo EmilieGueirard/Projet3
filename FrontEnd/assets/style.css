@@ -211,6 +211,11 @@ nav li {
 	color: #FFF;
 }
 
+.filters button[data-selected="true"] {
+    background-color: #1D6154;
+    color: #FFF;
+}
+
 #contact {
 	width: 50%;
 	margin: auto;

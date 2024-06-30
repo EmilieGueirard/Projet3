@@ -188,14 +188,14 @@ function modalAddPhoto()
     let submitButton = formSubmitButton();
         submitButton.addEventListener('click', handleSubmit);
     
-    let formContent = document.createElement("div");
-        formContent.classList.add("form-content");
+    let formContent = document.createElement('div');
+        formContent.classList.add('form-content');
         formContent.appendChild(formPhotoComponent());
         formContent.appendChild(formTitleComponent());
         formContent.appendChild(formCategoryComponent());
 
     let body = document.createElement('form');
-        body.classList.add("form-add-work");
+        body.classList.add('form-add-work');
         body.appendChild(formContent);
 
     createModal({
@@ -214,43 +214,43 @@ function modalAddPhoto()
  */
 function formPhotoComponent() 
 {
-    let errorContainer = document.createElement("p");
-        errorContainer.classList.add("error-message");
+    let errorContainer = document.createElement('p');
+        errorContainer.classList.add('error-message');
 
-    let fileErrorContainer = document.createElement("p");
-        fileErrorContainer.classList.add("file-error-message");
+    let fileErrorContainer = document.createElement('p');
+        fileErrorContainer.classList.add('file-error-message');
 
-    let imgPreview = document.createElement("img");
-        imgPreview.id = "img-preview";
-        imgPreview.style.display = "none";
-        imgPreview.style.maxWidth = "100%";
-        imgPreview.style.maxHeight = "169px";
+    let imgPreview = document.createElement('img');
+        imgPreview.id = 'img-preview';
+        imgPreview.style.display = 'none';
+        imgPreview.style.maxWidth = '100%';
+        imgPreview.style.maxHeight = '169px';
 
-    let fileInfo = document.createElement("p");
-        fileInfo.classList.add("p-photo");
+    let fileInfo = document.createElement('p');
+        fileInfo.classList.add('p-photo');
         fileInfo.textContent = "jpg, png : 4mo max";
 
-    let inputFile = document.createElement("input");
-        inputFile.type = "file";
-        inputFile.id = "input-file";
-        inputFile.classList.add("form-work-photo");
-        inputFile.accept = "image/jpeg, image/png";
+    let inputFile = document.createElement('input');
+        inputFile.type = 'file';
+        inputFile.id = 'input-file';
+        inputFile.classList.add('form-work-photo');
+        inputFile.accept = 'image/jpeg, image/png';
         inputFile.addEventListener('change', (event) => {
             handleFileChange(event, imgPreview, icon, label, fileInfo, fileErrorContainer);
             checkFormValidity();
         });
 
-    let label = document.createElement("label");
-        label.classList.add("form-button-add-photo");
-        label.setAttribute("for", "input-file");
+    let label = document.createElement('label');
+        label.classList.add('form-button-add-photo');
+        label.setAttribute('for', 'input-file');
         label.textContent = "+ Ajouter photo";
         label.appendChild(inputFile);
     
-    let icon = document.createElement("i");
-        icon.classList.add("fa-regular", "fa-image");
+    let icon = document.createElement('i');
+        icon.classList.add('fa-regular', 'fa-image');
 
-    let photoDiv = document.createElement("div");
-        photoDiv.classList.add("form-add-photo");
+    let photoDiv = document.createElement('div');
+        photoDiv.classList.add('form-add-photo');
         photoDiv.appendChild(icon);
         photoDiv.appendChild(label);
         photoDiv.appendChild(fileInfo);
@@ -268,23 +268,23 @@ function formPhotoComponent()
 
 function formTitleComponent() 
 {
-    let errorContainer = document.createElement("p");
-        errorContainer.classList.add("error-message");
+    let errorContainer = document.createElement('p');
+        errorContainer.classList.add('error-message');
 
-    let input = document.createElement("input");
-        input.type = "text";
-        input.name = "titre";
-        input.id = "input-title";
-        input.classList.add("form-title-work");
-        input.setAttribute("autocomplete", "off");
+    let input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'titre';
+        input.id = 'input-title';
+        input.classList.add('form-title-work');
+        input.setAttribute('autocomplete', 'off');
         input.addEventListener('input', checkFormValidity);
 
-    let label = document.createElement("label");
-        label.setAttribute("for", "input-title");
+    let label = document.createElement('label');
+        label.setAttribute('for', 'input-title');
         label.textContent = "Titre";    
 
-    let titleDiv = document.createElement("div");
-        titleDiv.classList.add("form-title");
+    let titleDiv = document.createElement('div');
+        titleDiv.classList.add('form-title');
         titleDiv.appendChild(label);
         titleDiv.appendChild(input);
         titleDiv.appendChild(errorContainer);
@@ -298,22 +298,22 @@ function formTitleComponent()
  */
 function formCategoryComponent() 
 {
-    let errorContainer = document.createElement("p");
-        errorContainer.classList.add("error-message");
+    let errorContainer = document.createElement('p');
+        errorContainer.classList.add('error-message');
 
-    let icon = document.createElement("i");
-        icon.classList.add("fa-solid", "fa-chevron-down", "select-icon");
+    let icon = document.createElement('i');
+        icon.classList.add('fa-solid', 'fa-chevron-down', 'select-icon');
 
-    let select = document.createElement("select");
-        select.id = "categories";
+    let select = document.createElement('select');
+        select.id = 'categories';
         select.addEventListener('change', checkFormValidity);
 
-    let label = document.createElement("label");
-        label.setAttribute("for", "categories");
+    let label = document.createElement('label');
+        label.setAttribute('for', 'categories');
         label.textContent = "Catégorie";
    
-    let categoryDiv = document.createElement("div");
-        categoryDiv.classList.add("form-categories");
+    let categoryDiv = document.createElement('div');
+        categoryDiv.classList.add('form-categories');
         categoryDiv.appendChild(label);
         categoryDiv.appendChild(select);
         categoryDiv.appendChild(icon);
@@ -328,10 +328,10 @@ function formCategoryComponent()
  */
 function formSubmitButton() 
 {
-    let submitButton = document.createElement("input");
-        submitButton.type = "button";
+    let submitButton = document.createElement('input');
+        submitButton.type = 'button';
         submitButton.value = "Valider";
-        submitButton.id = "form-button-submit";
+        submitButton.id = 'form-button-submit';
         submitButton.disabled = true;
         submitButton.classList.add('submit-button');
         submitButton.addEventListener('click', handleSubmit);
@@ -358,9 +358,9 @@ function iconBack()
 async function loadCategories() 
 {
     const categories = await httpGet(categories_url);
-    const categorySelect = document.getElementById("categories");
+    const categorySelect = document.getElementById('categories');
 
-    categorySelect.appendChild(new Option("", ""));
+    categorySelect.appendChild(new Option('', ''));
 
     categories.forEach(({ id, name }) => 
         categorySelect.appendChild(new Option(name, id))
@@ -422,10 +422,10 @@ function checkFileSize(file, fileErrorContainer)
 function displayImagePreview(event, imgPreview, icon, label, fileInfo, fileErrorContainer) 
 {
     imgPreview.src = event.target.result;
-    imgPreview.style.display = "block";
-    icon.style.display = "none";
-    label.style.display = "none";
-    fileInfo.style.display = "none";
+    imgPreview.style.display = 'block';
+    icon.style.display = 'none';
+    label.style.display = 'none';
+    fileInfo.style.display = 'none';
     addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer);
 }
 
@@ -459,15 +459,15 @@ function addTrashIconImg(imgPreview, icon, label, fileInfo, fileErrorContainer)
  */
 function removeImagePreview(imgPreview, icon, label, fileInfo, trashIcon, fileErrorContainer) 
 {
-    imgPreview.style.display = "none";
-    imgPreview.src = "";
-    icon.style.display = "block";
-    label.style.display = "block";
-    fileInfo.style.display = "block";
+    imgPreview.style.display = 'none';
+    imgPreview.src = '';
+    icon.style.display = 'block';
+    label.style.display = 'block';
+    fileInfo.style.display = 'block';
     fileErrorContainer.textContent = "";
     trashIcon.remove();
 
-    document.getElementById('input-file').value = ""; 
+    document.getElementById('input-file').value = ''; 
     
     checkFormValidity(); 
 }
@@ -552,11 +552,7 @@ function checkFormValidity() {
  */
 function validateInput(field, validationFunction, errorMessage) {
     const isValid = validationFunction(field);
-    if (!isValid) {
-        showFieldError(field, errorMessage);
-    } else {
-        hideFieldError(field);
-    }
+    isValid ? hideFieldError(field) : showFieldError(field, errorMessage);
     return isValid;
 }
 
@@ -575,7 +571,7 @@ function validatePhotoInput(input) {
  * @returns {boolean} - True if valid, false otherwise
  */
 function validateTitleInput(input) {
-    return input.value.trim() !== "";
+    return input.value.trim() !== '';
 }
 
 /**
@@ -584,7 +580,7 @@ function validateTitleInput(input) {
  * @returns {boolean} - True if valid, false otherwise
  */
 function validateSelectCategories(select) {
-    return select.value !== "";
+    return select.value !== '';
 }
 
 /**
@@ -594,8 +590,8 @@ function validateSelectCategories(select) {
  * @returns void
  */
 function showFieldError(field, message) {
-    let parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
-    let errorContainer = parentDiv.querySelector(".error-message");
+    let parentDiv = field.closest('.form-add-photo, .form-title, .form-categories');
+    let errorContainer = parentDiv.querySelector('.error-message');
     errorContainer.textContent = message;
     errorContainer.classList.add('active');
 }
@@ -606,8 +602,8 @@ function showFieldError(field, message) {
  * @returns void
  */
 function hideFieldError(field) {
-    let parentDiv = field.closest(".form-add-photo, .form-title, .form-categories");
-    let errorContainer = parentDiv.querySelector(".error-message");
+    let parentDiv = field.closest('.form-add-photo, .form-title, .form-categories');
+    let errorContainer = parentDiv.querySelector('.error-message');
     errorContainer.textContent = "";
     errorContainer.classList.remove('active');
 }
@@ -632,9 +628,9 @@ function showSuccessModal(message)
         }
     
     createModal({
-        header: "",
+        header: '',
         body: message,
-        footer: ""
+        footer: ''
     }, 'small-modal', '.success-modal');
 
     let iconClose = document.querySelector('.success-modal .icon-close');
@@ -662,7 +658,7 @@ function closeSuccessModal()
  */
 function openModal(modal) 
 {
-    modal.style.display = "flex";
+    modal.style.display = 'flex';
 }
 
 /**
@@ -702,9 +698,7 @@ function createModal(data, className, modalSelector = '.modal')
   
     let modalContent = document.createElement('div');
         modalContent.classList.add('modal-content');
-            if (className) {
-                modalContent.classList.add(className);
-            }
+        className && modalContent.classList.add(className);
         modalContent.append(iconClose);
     
     let modal = document.querySelector(modalSelector);

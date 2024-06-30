@@ -22,28 +22,22 @@ async function httpGet(url)
  * Send a POST request with JSON data or FormData
  * @param {string} url - The URL to send the request to
  * @param {Object|FormData} data - The data to send
- * @param {Object} [headers={}] - Optional headers
+ * @param {Object} headers - Optional headers
  * @returns {Promise<Object|null>} - The response data
  */
 async function httpPost(url, data, headers = {}) {
-    let options = {
+    const isFormData = data instanceof FormData;
+    const options = {
         method: 'POST',
-        headers: Object.assign({}, headers),
-        body: null
+        headers: Object.assign(
+            {},
+            headers,
+            isFormData ? { 'Authorization': `Bearer ${sessionStorage.getItem('token')}` } : { 'Content-Type': 'application/json' }
+        ),
+        body: isFormData ? data : JSON.stringify(data)
     };
 
-    if (data instanceof FormData) {
-        options.body = data;
-        options.headers = Object.assign(options.headers, {
-            'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-        });
-        delete options.headers['Content-Type']; 
-    } else {
-        options.body = JSON.stringify(data);
-        options.headers = Object.assign(options.headers, {
-            'Content-Type': 'application/json'
-        });
-    }
+    isFormData && delete options.headers['Content-Type'];
 
     try {
         const response = await fetch(url, options);
@@ -54,10 +48,11 @@ async function httpPost(url, data, headers = {}) {
     }
 }
 
+
 /**
  * Send a DELETE request
  * @param {string} url - The URL to send the request to
- * @param {Object} [headers={}] - Optional headers
+ * @param {Object} headers - Optional headers
  * @returns {Promise<boolean>} - Success status
  */
 async function httpDelete(url, headers={})
