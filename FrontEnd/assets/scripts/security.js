@@ -12,6 +12,7 @@ const loginLogoutLink = document.getElementById("loginLink");
 document.addEventListener('DOMContentLoaded', function() {
     addAuthLink();
     displayEditionMode();
+    activeLinkLogin(); 
 });
 
 /**
@@ -37,13 +38,11 @@ form?.addEventListener('submit', async (event) => {
  */
 function authResponse(response) 
 {
-    if (!response?.userId) {
-        authError("Erreur dans l’identifiant ou le mot de passe");
-    } else if (response?.token) {
-        authSuccess(response.token);
-    } else {
-        authError("Une erreur est survenue");
-    }
+    !response?.userId 
+    ? authError("Erreur dans l’identifiant ou le mot de passe") 
+    : response?.token 
+    ? authSuccess(response.token) 
+    : authError("Une erreur est survenue");
 }
 
 /**
@@ -115,12 +114,7 @@ function addAuthLink()
     let navList = document.querySelector('nav ul');
     let authLink = createAuthLink();
     
-    if (navList) {
-        insertAuthLink(navList, authLink);
-        if (isAuthenticated()) {
-            setLogoutLink(authLink);
-        }
-    }
+    navList && (insertAuthLink(navList, authLink), isAuthenticated() && setLogoutLink(authLink));
 }
 
 /**
@@ -131,6 +125,7 @@ function createAuthLink()
 {
     let authAnchor = document.createElement('a');
         authAnchor.classList.add('nav-link');
+        authAnchor.id = 'loginLink';
         authAnchor.textContent = "login";
         authAnchor.href = './login.html';
 
@@ -177,15 +172,20 @@ function logout()
 }
 
 /**
+ * Update the active link based on the current URL
+ */
+function activeLinkLogin() 
+{
+    const loginLink = document.getElementById('loginLink');
+    loginLink?.classList.toggle('active', loginLink?.href === window.location.href);
+}
+
+/**
  * Display full edit mode if token is present
  */
 function displayEditionMode() 
 {
-    if (isAuthenticated()) {
-        styleModif();
-        deleteFilters();
-        addModifyLink();
-    }
+    isAuthenticated() && (styleModif(), deleteFilters(), addModifyLink());
 }
 
 /**
