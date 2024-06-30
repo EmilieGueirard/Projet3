@@ -1,6 +1,7 @@
-# Portfolio-architecte-sophie-bluel
+# Formation Développeur Web - OpenClassrooms
 
-Code du projet 6 d'intégrateur web.
+Projet 3 - Sophie Bluel :
+Créez une page web dynamique avec Javascript
 
 ## Information pour le lancer le code
 
